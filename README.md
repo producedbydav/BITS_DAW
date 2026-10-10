@@ -31,14 +31,16 @@ No wallet connection or transaction is needed. The app reads instrument data thr
 
 | Area | What it does |
 | --- | --- |
-| Channels | Select and rename ten independent tracks; mute, solo, and monitor activity. |
-| Produce | Edit notes in the piano roll, adjust velocity, perform, record, and view the full arrangement. |
+| Channels | Select and rename ten independent tracks; identify sounds by BIT SVG artwork, mute, solo, and adjust volume plus reverb, delay, and distortion wet/dry knobs. Channels without notes are dimmed. |
+| Produce | Edit notes in the piano roll, adjust velocity, play the keyboard, and overlay-record into the selected channel. |
+| Arrange | View the full arrangement, toggle play/skip blocks, extend tracks, and seek. |
+| Perform | Play ten assignable pads and overlay-record across their channels; switch between this view, Produce, Arrange, and Visual. |
 | Visual | Preview the circular composition artwork and live waveform analyzers. |
 | Sound inspector | Choose a BIT, inspect its waveform, set the sample start offset, and adjust sampler settings and effects. |
 | Arrange inspector | Set phrase length and play/skip slots for the selected channel. |
 | Master inspector | Adjust output effects and gain; view stereo peak meters, peak holds, and clip indicators. |
 | Data inspector | Inspect or copy note, arrangement, and parameter hex; import from chain or export a renderer artifact. |
-| Visual inspector | Set background, ink, and accent colors; expand the visual preview. |
+| Visual inspector | Set or randomize background, ink, and accent colors; expand the visual preview. |
 | Project | Name, save, restore, and import projects; start a blank project or change connection settings. |
 
 Workspace colors are separate from the composition's artwork palette and can be saved or imported independently.
@@ -55,11 +57,15 @@ Workspace colors are separate from the composition's artwork palette and can be 
 
 **Import MIDI** maps note-bearing MIDI parts to editor channels. Choose replacement or merge, and optionally expand phrase lengths to fit the file. Import follows the file's tempo map while leaving the project BPM unchanged; samples and effects stay as configured.
 
-### Recording takes
+### Perform and overlay recording
 
-Select a channel and instrument, then press **Record**. Recording starts after a one-bar count-in, with other tracks playing as backing. The **Click** control toggles the metronome.
+In **Produce**, select a channel and instrument, then press **Record**. Recording starts after a one-bar count-in while current notes play as backing. New notes are added to the existing part directly, without a takes dialog. The **Click** control toggles the metronome; Undo restores the previous part.
 
-Enable **Loop takes** for 2, 4, 8, or 16 passes through the selected phrase. Each nonempty pass is stored separately. Open **Takes…** to audition performances, use one, combine several, or add them to the current part. Applying takes archives the previous part. Takes are included in project saves.
+Open **Perform** for ten pads. Assign each pad a channel and MIDI note (60 plays the original sample pitch). Play pads with the mouse/touchscreen, number keys **1–9, 0**, the matching numpad keys, or MIDI notes **36–45**. Multiple pads can play together. **Prepare pads** loads their instruments; **All notes off** releases held notes.
+
+Perform recording overlays notes onto each pad's assigned channel. Set **Record bars** and velocity before recording; the recording length is at least the longest assigned channel phrase. New notes are merged when recording finishes, and Undo is available per channel.
+
+**Random BITs** loads ten sounds from an editable ID range, defaulting to **1–48**, while keeping notes and channel settings. Save or load a **BIT preset** to reuse the ten sound choices.
 
 Recording captures note pitch, timing, duration, and velocity. It does not record microphone audio or produce an audio mixdown.
 
@@ -69,23 +75,25 @@ Each channel has one note phrase and its own phrase length in bars. Arrangement 
 
 Use the full arrangement view to toggle blocks, extend tracks, seek from the ruler, or double the composition. The composition loops at the longest arrangement among channels containing note data. Bars contain four beats; notes starting beyond their channel's phrase boundary are not scheduled.
 
-When changing tempo, choose whether to move notes to preserve their beat positions and lengths or keep their millisecond timing. Takes retain their recorded millisecond timing.
+Changing tempo automatically moves and resizes notes to preserve their beat positions and lengths, without a confirmation popup.
 
 ## Sound and output
 
-Each channel provides root note, transpose, attack, release, volume, sample start offset, pan, and a voice limit. Choose one voice for monophonic playback, up to 32 voices, or unlimited voices.
+Each channel provides root note, transpose, attack, release, volume, sample start offset, pan, and a voice limit. Defaults are **4 seconds release** and **10 voices**. Choose one voice for monophonic playback, up to 32 voices, or unlimited voices.
+
+Delay time defaults to a **BPM** note division. Uncheck BPM to enter milliseconds. Synced delays follow tempo changes within the channel's one-second delay range. Channel-strip knobs provide volume and reverb, delay, and distortion wet/dry control.
 
 Each channel routes through sampler → delay → reverb → distortion → pan. All channels then feed master distortion → master filter → master gain.
 
 The master filter supports bypass, lowpass, highpass, and bandpass, with cutoff, Q, and rolloff controls. Output meters show stereo sample peaks after master gain.
 
-Notes and voice limits update during playback. Restart playback to apply other sound settings.
+Sound settings update during playback and performance. Sample/root-note changes rebuild the affected voice, and reverb changes may briefly wait for the effect to prepare.
 
 ## Saving and importing
 
 **Save** downloads numbered JSON files such as `My piece-001.json` and also attempts to keep a local browser copy. **Save locally** and **Restore local save** use browser storage. Downloaded JSON files are the portable project backups; browser storage can be cleared or unavailable.
 
-Projects include all ten channels, BIT token IDs, notes, arrangements, sampler/effect parameters, takes, channel names, tempo, master settings, colors, and mute/solo settings. Audio is fetched again from Ethereum using the saved BIT IDs rather than embedded in the JSON.
+Projects include all ten channels, BIT token IDs, notes, arrangements, sampler/effect parameters, delay-sync settings, performance-pad assignments, channel names, tempo, master settings, colors, and mute/solo settings. Legacy takes remain in project saves. Audio is fetched again from Ethereum using the saved BIT IDs rather than embedded in the JSON.
 
 **Import JSON** lets you select individual channels and choose which data to bring in: notes, arrangements and phrase lengths, sound settings, instruments, and global settings. Parts-only imports preserve the current instruments, phrase lengths, arrangements, and tempo. Note timing remains in milliseconds.
 
@@ -116,7 +124,7 @@ Exports contain fixed composition values. Enable **Bake mute/solo** to omit note
 | Arrangement | V3 play/skip bits, most-significant bit first, followed by a set terminator bit and zero padding. Phrase length is stored separately. |
 | Channel settings | 24 parameter bytes; the BIT ID is stored separately in project JSON. |
 | Master effects | 8 parameter bytes. |
-| Project JSON | `BITS_TEN_CHANNEL_EDITOR_SAVE`, currently schema version **14**. This is separate from app release **v0.17**. |
+| Project JSON | `BITS_TEN_CHANNEL_EDITOR_SAVE`, currently schema version **15**. This is separate from app release **v0.17**. |
 
 Older V1 and V2 arrangements are accepted during project import. Renderer artifacts and editable project JSON are different formats.
 
@@ -134,6 +142,7 @@ Older V1 and V2 arrangements are accepted during project import. Renderer artifa
 | Alt + drag | Bypass snap |
 | R / T | Zoom piano roll out / in |
 | A W S E D F T G Y H U J K | Play notes when computer keys are enabled |
+| 1–9, 0 (top row or numpad) | Trigger pads 1–10 in Perform |
 
 Note-editing shortcuts depend on workspace focus. To tap tempo, focus the tempo field and press T repeatedly.
 

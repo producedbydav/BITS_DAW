@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>BITS_DAW alpha v0.17</title>
+  <title>BITS Ten-Channel Test Editor</title>
   <style>
     :root {
       --preview-bg: #1c1c1c;
@@ -421,8 +421,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
 #soundGrid button[aria-pressed=true]{background:var(--ui-accent);color:var(--ui-bg)}
 #recentSounds{display:flex;gap:5px;flex-wrap:wrap}#recentSounds button{font-size:10px}
 #velocityLane{display:block;width:100%;height:86px;flex-shrink:0;touch-action:none;background:var(--ui-bg);border-top:1px solid var(--ui-line)}
-#expressionControls{padding:4px 12px;gap:7px}.take-row{display:flex;gap:10px;align-items:center;padding:9px;border-bottom:1px solid var(--ui-line)}
-#takesDialog{width:min(580px,94vw);max-height:85vh;overflow:auto}#takeList{max-height:45vh;overflow:auto}#takeMessage{font-size:11px}
+#expressionControls{padding:4px 12px;gap:7px}
 #masterMeters{padding:0 0 16px;margin-bottom:16px;border-bottom:1px solid var(--ui-line)}
 #resetMasterPeaks{font-size:9px;padding:3px 6px;min-height:22px;letter-spacing:0;text-transform:none}
 .master-meter-row{display:grid;grid-template-columns:12px minmax(0,1fr) 36px 29px;gap:6px;align-items:center;margin:8px 0;font-size:10px;font-variant-numeric:tabular-nums}
@@ -432,13 +431,50 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
 .master-clip{font-size:8px;color:var(--ui-muted);padding:2px;border:1px solid var(--ui-line);border-radius:2px}.master-clip.active{background:#cf5353;color:white;border-color:#cf5353}
 .master-meter-scale{display:flex;justify-content:space-between;margin:0 77px 0 18px;font-size:8px;color:var(--ui-muted)}
 #masterPeakReadout{font-size:10px;color:var(--ui-muted);margin-top:10px;font-variant-numeric:tabular-nums}
+#allArrangement{background:var(--preview-bg)}
+#arrContent{background:var(--preview-bg);color:var(--preview-ink)}
+.arr-lane{background:repeating-linear-gradient(to right,color-mix(in srgb,var(--preview-ink) 18%,transparent) 0,color-mix(in srgb,var(--preview-ink) 18%,transparent) 1px,transparent 1px,transparent var(--arr-bar))}
+#allArrangement .all-arr-cell{background:var(--preview-bg);color:var(--preview-ink);border-color:color-mix(in srgb,var(--preview-ink) 40%,transparent)}
+#allArrangement .all-arr-cell[aria-pressed=true]{background:var(--preview-ink);color:var(--preview-bg);border-color:var(--preview-ink)}
+#allArrangement .all-arr-cell.beyond{background:transparent;color:var(--preview-ink)}
+#arrPlayhead{background:var(--preview-accent)}.arr-loop-end{border-color:var(--preview-accent)}
+#quickSoundGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;max-height:300px;overflow:auto;margin:8px 0}
+.quick-sound{border:1px solid var(--ui-line);border-radius:4px;overflow:hidden}.quick-sound.assigned{border-color:var(--ui-accent);box-shadow:0 0 0 1px var(--ui-accent)}
+.quick-sound button{width:100%;padding:3px;font-size:9px;border:0;border-radius:0}.quick-sound .sound-art{height:52px;padding:3px}.quick-sound img{width:100%;height:100%;object-fit:contain}
+#shelfTarget{font-size:10px}#samplePreloadStatus{font-size:9px;max-width:180px}
+
+#performWindow{position:absolute;inset:66px 0 0;overflow:auto;padding:18px;background:var(--ui-bg);display:flex;flex-direction:column;gap:14px}
+#performWindow[hidden]{display:none}
+#padGrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;flex:1;min-height:240px}
+.pad-slot{display:flex;flex-direction:column;gap:5px;min-width:0}
+.pad-hit{flex:1;min-height:76px;display:flex;flex-direction:column;justify-content:space-between;align-items:start;text-align:left;touch-action:none;user-select:none;background:var(--ui-panel);border:1px solid var(--ui-line);color:var(--ui-text);padding:12px}
+.pad-hit.held{background:var(--ui-accent);color:var(--ui-bg);border-color:var(--ui-accent)}
+.pad-hit span{font-size:10px;opacity:.75}.pad-hit strong{font-size:14px}.pad-config{display:flex;gap:4px}.pad-config select{min-width:0;width:100%;font-size:10px}.pad-config input{width:49px;font-size:10px}
+#padStatus{font-size:11px;min-height:16px;color:var(--ui-muted)}
+#performancePanel.pad-mode #performanceBody,#performancePanel.pad-mode #performanceToggle,#performancePanel.pad-mode #chooseSound,#performancePanel.pad-mode #prepareInstrument,#performancePanel.pad-mode #instrumentReady,#performancePanel.pad-mode #samplePreloadStatus{display:none}
+#performWindow{bottom:var(--performance-height,95px)}
+@media(max-width:650px){#performWindow{padding:8px}#padGrid{gap:5px;grid-template-columns:repeat(2,minmax(0,1fr))}.pad-hit{padding:7px}.pad-config{flex-wrap:wrap}.pad-config input{width:100%}}
+
+
+#tabs .track-select{grid-template-columns:36px minmax(0,1fr) 5px}
+.track-art{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--ui-line);border-radius:3px;overflow:hidden;font-size:8px}
+.track-art img{width:100%;height:100%;object-fit:contain}.track-art img[hidden]{display:none}
+#tabs>.track-row.empty-channel{opacity:.42;filter:grayscale(1)}#tabs>.track-row.empty-channel:hover,#tabs>.track-row.empty-channel:focus-within{opacity:.8}
+#tabs>.track-row.empty-channel.active{opacity:.68}
+.arr-track.empty-channel{opacity:.4;filter:grayscale(1)}.arr-track.empty-channel:hover{opacity:.75}
+.channel-knobs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;padding:0 5px 9px}
+.channel-knob-wrap{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}.channel-knob-wrap small{font-size:8px;color:var(--ui-muted)}
+.channel-knob{width:27px;height:27px;border-radius:50%;border:1px solid var(--ui-line);background:conic-gradient(from 225deg,var(--ui-accent) var(--knob-fill),var(--ui-line) 0deg 270deg,transparent 270deg);position:relative;touch-action:none;cursor:ns-resize;outline-offset:3px}
+.channel-knob:before{content:'';position:absolute;inset:3px;border-radius:50%;background:var(--ui-bg)}
+.channel-knob:after{content:'';position:absolute;left:12px;top:4px;width:2px;height:8px;background:var(--ui-text);transform-origin:1px 9px;transform:rotate(var(--knob-angle))}
+.delay-time-control{display:flex;flex-wrap:wrap;gap:5px;align-items:center}.delay-time-control select{max-width:100px}.delay-time-control input[type=number]{width:75px}.delay-time-control label{display:flex;align-items:center;gap:3px;white-space:nowrap}
 </style>
 </head>
 <body>
   <canvas id="canvas"></canvas>
   <div id="editor">
     <aside id="panel">
-      <h1>BITS_DAW alpha v0.17</h1>
+      <h1>BITS TEN-CHANNEL TEST EDITOR</h1>
       <div class="sub">paste bytes, dial parameters, copy final encoded data</div>
       <div class="tabs" id="tabs"></div>
       <section>
@@ -701,7 +737,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       60,   // 00 root note = C4
       0,    // 01 transpose = 0
       1,    // 02 attack ~= 8ms
-      16,   // 03 release ~= 260ms
+      255,  // 03 release = 4 seconds
       227,  // 04 volume ~= 0dB
 
       64,   // 05 delay ~= 251ms
@@ -718,7 +754,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
 
       0, 0, 0, // 0E-10 sample start offset = 0ms
       0,       // 11 pan = center
-      1,       // 12 maximum voices = 1 (monophonic)
+      10,      // 12 maximum voices = 10
       0, 0, 0, 0, 0 // 13-17 reserved
     ]);
 
@@ -1190,13 +1226,14 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
         master = new Tone.Gain(MASTER_GAIN).toDestination();
         connectMasterMeters();
         const outputParams = parseOutputParams(outputParamBytes);
-        outputFilter = outputParams.filterType==='bypass'?null:new Tone.Filter({
-          type:outputParams.filterType,frequency:outputParams.filterCutoff,Q:outputParams.filterQ,rolloff:outputParams.filterRolloff
+        outputFilter = new Tone.Filter({
+          type:outputParams.filterType==='bypass'?'lowpass':outputParams.filterType,frequency:outputParams.filterCutoff,Q:outputParams.filterQ,rolloff:outputParams.filterRolloff
         });
-        outputDistortion = outputParams.distortionWet>0?new Tone.Distortion({
+        outputDistortion = new Tone.Distortion({
           distortion:outputParams.distortionAmount,oversample:outputParams.distortionOversample,wet:outputParams.distortionWet
-        }):new Tone.Gain(1);
-        if(outputFilter){outputDistortion.connect(outputFilter);outputFilter.connect(master);}
+        });
+        outputFilter._bitsType=outputParams.filterType;
+        if(outputParams.filterType!=='bypass'){outputDistortion.connect(outputFilter);outputFilter.connect(master);}
         else outputDistortion.connect(master);
         voices = new Array(CHANNEL_COUNT).fill(null);
 
@@ -1474,6 +1511,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
     let selectedVoice = 0;
     let channelNames=Array.from({length:CHANNEL_COUNT},(_,i)=>'Channel '+(i+1));
     let paramBytes = PARAM_DATA.map(h => cleanHex(h) ? hexToBytes(h) : new Uint8Array(DEFAULT_PARAM_BYTES));
+    let channelDelaySync=Array.from({length:CHANNEL_COUNT},()=>({enabled:true,beats:.5}));
     let outputParamBytes = new Uint8Array(DEFAULT_OUTPUT_PARAM_BYTES);
     let bitTokenIds = Array.from({length:CHANNEL_COUNT}, (_,i) => i + 1);
     const BITS_ADDRESS = "0xB49911F9063154318Dd98848C65c1cb15e43C917";
@@ -1717,7 +1755,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       paramBytes[index][14]=(n>>16)&255;
       paramBytes[index][15]=(n>>8)&255;
       paramBytes[index][16]=n&255;
-      PARAM_DATA[index]=bytesToHex(paramBytes[index]);
+      PARAM_DATA[index]=bytesToHex(paramBytes[index]);applyChannelSound(index);
       return n;
     }
     function currentWaveWindow() {
@@ -1848,14 +1886,93 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       layoutCompositionPreview();
       setTimeout(()=>analyzeCurrentWaveform(false),0);
     }
+
+    const DELAY_DIVISIONS=[['1/32',.125],['1/16 T',1/6],['1/16',.25],['1/16 D',.375],['1/8 T',1/3],['1/8',.5],['1/8 D',.75],['1/4 T',2/3],['1/4',1],['1/4 D',1.5],['1/2',2],['1 bar',4]];
+    function readDelaySync(value){return {enabled:value?.enabled===true,beats:DELAY_DIVISIONS.some(d=>d[1]===value?.beats)?value.beats:.5};}
+    function updateSyncedDelays(){
+      channelDelaySync.forEach((setting,ch)=>{if(setting.enabled){paramBytes[ch][5]=valueToByte(Math.min(1,setting.beats*60/BPM),5);PARAM_DATA[ch]=bytesToHex(paramBytes[ch]);applyChannelSound(ch);}});
+    }
+    function applyChannelSound(ch){
+      const v=voices[ch];if(!v)return;const p=parseParams(bytesToHex(paramBytes[ch]));
+      if(v.params.rootNote!==p.rootNote||v.params.sampleOffsetMs!==p.sampleOffsetMs)queueChannelRebuild(ch);
+      v.sampler.attack=p.attack;v.sampler.release=p.release;
+      v.sampler.volume.rampTo(p.volumeDb,.02);v.panner.pan.rampTo(p.pan,.02);
+      let added=false;
+      if(!v.delay&&p.delayWet>0){v.delay=new Tone.FeedbackDelay({delayTime:p.delayTime,feedback:p.delayFeedback,wet:p.delayWet});added=true;}
+      if(!v.reverb&&p.reverbWet>0){v.reverb=new Tone.Reverb({decay:p.reverbDecay,preDelay:p.reverbPreDelay,wet:0});added=true;const reverb=v.reverb;reverb.ready.then(()=>{if(voices[ch]===v)reverb.wet.rampTo(parseParams(bytesToHex(paramBytes[ch])).reverbWet,.02);}).catch(e=>setStatus('Reverb: '+e.message,true));}
+      if(!v.distortion&&p.distortionWet>0){v.distortion=new Tone.Distortion({distortion:p.distortionAmount,oversample:p.distortionOversample,wet:p.distortionWet});added=true;}
+      if(added){v.sampler.disconnect();for(const node of [v.delay,v.reverb,v.distortion])node?.disconnect();let tail=v.sampler;for(const node of [v.delay,v.reverb,v.distortion])if(node){tail.connect(node);tail=node;}tail.connect(v.panner);}
+      if(v.delay){v.delay.wet.rampTo(p.delayWet,.02);v.delay.delayTime.rampTo(p.delayTime,.02);v.delay.feedback.rampTo(p.delayFeedback,.02);}
+      if(v.reverb){if(v.reverb.decay!==p.reverbDecay)v.reverb.decay=p.reverbDecay;if(v.reverb.preDelay!==p.reverbPreDelay)v.reverb.preDelay=p.reverbPreDelay;v.reverb.wet.rampTo(p.reverbWet,.02);v.reverb.ready?.catch(e=>setStatus('Reverb: '+e.message,true));}
+      if(v.distortion){v.distortion.wet.rampTo(p.distortionWet,.02);v.distortion.distortion=p.distortionAmount;v.distortion.oversample=p.distortionOversample;}
+      const rootNote=v.params.rootNote,sampleOffsetMs=v.params.sampleOffsetMs;Object.assign(v.params,p,{rootNote,sampleOffsetMs});
+    }
+    const channelRebuildTimers=Array(CHANNEL_COUNT).fill(null);
+    function disposeOldVoice(v){if(!v)return;v.part?.dispose();toneParts=toneParts.filter(part=>part!==v.part);for(const held of v.sources||[])for(const source of held.sources)source.dispose();v.sources=[];for(const node of [v.sampler,v.delay,v.reverb,v.distortion,v.panner,v.mix,v.analyser])node?.dispose();}
+    function queueChannelRebuild(ch){
+      clearTimeout(channelRebuildTimers[ch]);voiceBuildIds[ch]++;
+      channelRebuildTimers[ch]=setTimeout(async()=>{
+        const old=voices[ch],graph=outputDistortion;if(!old||!graph)return;
+        try{const next=await createAudioVoice(ch,graph);if(!next)return;disposeOldVoice(old);applyChannelSound(ch);if(playing)rebuildVoicePart(ch);}
+        catch(e){setStatus('Channel '+(ch+1)+': '+e.message,true);}
+      },70);
+    }
+    function applyMasterSound(){
+      if(!master||!outputDistortion||!outputFilter)return;const p=parseOutputParams(outputParamBytes);
+      master.gain.rampTo(MASTER_GAIN,.02);outputDistortion.distortion=p.distortionAmount;outputDistortion.oversample=p.distortionOversample;outputDistortion.wet.rampTo(p.distortionWet,.02);
+      if(outputFilter._bitsType!==p.filterType){outputDistortion.disconnect();outputFilter.disconnect();if(p.filterType==='bypass')outputDistortion.connect(master);else{outputDistortion.connect(outputFilter);outputFilter.connect(master);}outputFilter._bitsType=p.filterType;}
+      if(p.filterType!=='bypass')outputFilter.type=p.filterType;outputFilter.frequency.rampTo(p.filterCutoff,.02);outputFilter.Q.rampTo(p.filterQ,.02);outputFilter.rolloff=p.filterRolloff;
+    }
+    function delayTimeRow(row){
+      const ch=selectedVoice,setting=channelDelaySync[ch];
+      row.innerHTML='<label>delay time</label><div class="delay-time-control"><label><input type="checkbox" aria-label="Sync delay to BPM"> BPM</label><select aria-label="Delay note division"></select><input type="number" min="0" max="1000" step="1" aria-label="Delay milliseconds"></div><output></output>';
+      const check=row.querySelector('[type=checkbox]'),select=row.querySelector('select'),ms=row.querySelector('[type=number]'),out=row.querySelector('output');
+      for(const [label,beats]of DELAY_DIVISIONS){const o=document.createElement('option');o.value=beats;o.textContent=label;select.append(o);}
+      const refresh=()=>{check.checked=setting.enabled;select.value=setting.beats;select.hidden=!setting.enabled;ms.hidden=setting.enabled;const exact=Math.round(byteToValue(paramBytes[ch][5],5)*1000);ms.value=exact;out.textContent=exact+' ms'+(setting.enabled&&setting.beats*60000/BPM>1000?' (limit)':'');out.title='Packed delay range: 0–1000 ms; approximately 4 ms resolution.';};
+      const commit=()=>{PARAM_DATA[ch]=bytesToHex(paramBytes[ch]);$('paramHex').value=PARAM_DATA[ch];applyChannelSound(ch);updateInfo();layoutCompositionPreview();refresh();};
+      check.onchange=()=>{setting.enabled=check.checked;if(setting.enabled)paramBytes[ch][5]=valueToByte(Math.min(1,setting.beats*60/BPM),5);commit();};
+      select.onchange=()=>{setting.beats=Number(select.value);paramBytes[ch][5]=valueToByte(Math.min(1,setting.beats*60/BPM),5);commit();};
+      ms.oninput=()=>{paramBytes[ch][5]=valueToByte(bound(Number(ms.value)||0,0,1000)/1000,5);commit();};refresh();
+    }
+    function addChannelKnobs(row,ch){
+      const box=document.createElement('div');box.className='channel-knobs';
+      for(const [index,label]of [[4,'Vol'],[10,'Rev'],[7,'Dly'],[13,'Dist']]){
+        const wrap=document.createElement('div');wrap.className='channel-knob-wrap';const knob=document.createElement('div');knob.className='channel-knob';knob.tabIndex=0;knob.setAttribute('role','slider');knob.dataset.param=index;
+        knob.setAttribute('aria-label',channelNames[ch]+' '+(index===4?'volume':FIELD_DEFS[index][0]+' / dry'));knob.setAttribute('aria-valuemin',index===4?'-48':'0');knob.setAttribute('aria-valuemax',index===4?'6':'100');
+        const caption=document.createElement('small');caption.textContent=label;
+        const set=b=>{paramBytes[ch][index]=bound(Math.round(b),0,255);PARAM_DATA[ch]=bytesToHex(paramBytes[ch]);applyChannelSound(ch);if(ch===selectedVoice)renderParams();updateChannelKnobs(row,ch);updateInfo();layoutCompositionPreview();};
+        let drag=null;knob.onpointerdown=e=>{if(e.button!==0)return;e.preventDefault();e.stopPropagation();knob.focus();knob.setPointerCapture(e.pointerId);drag={y:e.clientY,x:e.clientX,value:paramBytes[ch][index]};};
+        knob.onpointermove=e=>{if(drag)set(drag.value+(drag.y-e.clientY+e.clientX-drag.x)*(e.shiftKey?.25:2));};knob.onpointerup=knob.onpointercancel=knob.onlostpointercapture=()=>drag=null;
+        knob.onkeydown=e=>{const steps={ArrowUp:1,ArrowRight:1,ArrowDown:-1,ArrowLeft:-1,PageUp:16,PageDown:-16};if(e.key in steps||e.key==='Home'||e.key==='End'){e.preventDefault();e.stopPropagation();set(e.key==='Home'?0:e.key==='End'?255:paramBytes[ch][index]+steps[e.key]*(e.shiftKey?1:2));}};
+        knob.ondblclick=()=>set(index===4?valueToByte(0,4):0);wrap.append(knob,caption);box.append(wrap);
+      }row.append(box);updateChannelKnobs(row,ch);
+    }
+    function channelHasNotes(ch){try{return parsePart(PART_DATA[ch]).length>0;}catch(_){return false;}}
+    function updateChannelKnobs(row,ch){for(const knob of row.querySelectorAll('.channel-knob')){const i=Number(knob.dataset.param),b=paramBytes[ch][i],value=i===4?byteToValue(b,4):b/255*100,text=i===4?value.toFixed(1)+' dB':Math.round(value)+'% wet';knob.style.setProperty('--knob-fill',(b/255*270)+'deg');knob.style.setProperty('--knob-angle',(b/255*270-135)+'deg');knob.setAttribute('aria-valuenow',value.toFixed(1));knob.setAttribute('aria-valuetext',text);knob.title=FIELD_DEFS[i][0]+': '+text+' · drag / arrow keys';}}
+    const railArtPending=new Map();let railArtRunning=0;const railArtQueue=[];
+    function fetchRailArt(rpc,id){const key=rpc+'|'+id;if(bitArtCache.has(key))return Promise.resolve(bitArtCache.get(key));if(railArtPending.has(key))return railArtPending.get(key);
+      const task=new Promise((resolve,reject)=>{railArtQueue.push(async()=>{let c;try{c=bitContract(rpc);const address=await c.tokenToRenderer(id),renderer=new ethers.Contract(address,['function tokenToSvg(uint256) view returns (string)'],c.runner);const src=bitImageUrl(await renderer.tokenToSvg(id));bitArtCache.set(key,src);resolve(src);}catch(e){reject(e);}finally{c?.runner?.destroy?.();railArtPending.delete(key);}});});railArtPending.set(key,task);pumpRailArt();return task;
+    }
+    function pumpRailArt(){while(railArtRunning<3&&railArtQueue.length){railArtRunning++;railArtQueue.shift()().finally(()=>{railArtRunning--;pumpRailArt();});}}
+    function updateRailArt(row,ch){const art=row.querySelector('.track-art'),rpc=$('rpcUrl').value.trim(),id=bitTokenIds[ch],key=rpc+'|'+id;if(art.dataset.key===key)return;art.dataset.key=key;const img=art.querySelector('img'),fallback=art.querySelector('span');img.hidden=true;img.removeAttribute('src');fallback.hidden=false;fallback.textContent='…';
+      fetchRailArt(rpc,id).then(src=>{if(art.dataset.key!==key)return;img.onload=()=>{if(art.dataset.key===key){img.hidden=false;fallback.hidden=true;}};img.onerror=()=>{if(art.dataset.key===key){img.hidden=true;fallback.hidden=false;fallback.textContent='BIT';}};img.alt='BIT '+id;img.src=src;}).catch(()=>{if(art.dataset.key===key)fallback.textContent='BIT';});
+    }
+    function randomVisualPalette(){
+      const h=Math.random()*360,light=Math.random()<.35;
+      const hex=(h,s,l)=>{s/=100;l/=100;const a=s*Math.min(l,1-l),f=n=>{const k=(n+h/30)%12;return Math.round(255*(l-a*Math.max(-1,Math.min(k-3,9-k,1)))).toString(16).padStart(2,'0');};return '#'+f(0)+f(8)+f(4);};
+      BG_COLOR=hex(h,20+Math.random()*25,light?91:8);INK_COLOR=hex((h+25)%360,15,light?12:91);ACCENT_COLOR=hex((h+100+Math.random()*160)%360,65,light?38:65);
+      for(const [id,out,v]of [['bgColor','bgOut',BG_COLOR],['inkColor','inkOut',INK_COLOR],['accentColor','accentOut',ACCENT_COLOR]]){$(id).value=v;$(out).textContent=v;}applyPalette();draw();drawWaveform();layoutCompositionPreview();
+    }
+
     function renderParams() {
       paramsEl.innerHTML="";
       FIELD_DEFS.forEach((d,i)=>{
         const row=document.createElement("div"); row.className="param";
+        if(i===5){delayTimeRow(row);paramsEl.appendChild(row);return;}
         const value=byteToValue(paramBytes[selectedVoice][i],i);
         row.innerHTML=`<label>${d[0]}</label><input type="range" min="${d[1]}" max="${d[2]}" step="${d[3]}" value="${value}"><output>${d[4](value)}</output>`;
         const input=row.querySelector("input"), out=row.querySelector("output");
-        input.addEventListener("input",()=>{ paramBytes[selectedVoice][i]=valueToByte(Number(input.value),i); const exact=byteToValue(paramBytes[selectedVoice][i],i); out.textContent=d[4](exact); $("paramHex").value=bytesToHex(paramBytes[selectedVoice]); updateInfo(); layoutCompositionPreview(); });
+        input.addEventListener("input",()=>{ paramBytes[selectedVoice][i]=valueToByte(Number(input.value),i); const exact=byteToValue(paramBytes[selectedVoice][i],i); out.textContent=d[4](exact); PARAM_DATA[selectedVoice]=bytesToHex(paramBytes[selectedVoice]);applyChannelSound(selectedVoice); $("paramHex").value=bytesToHex(paramBytes[selectedVoice]); updateInfo(); layoutCompositionPreview(); });
         paramsEl.appendChild(row);
       });
 
@@ -1883,7 +2000,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
         const signed=Math.max(-127,Math.min(127,Math.round(Number(panInput.value)*127)));
         paramBytes[selectedVoice][17]=signed<0?signed+256:signed;
         const exact=readI8(paramBytes[selectedVoice][17])/127;
-        panOutput.textContent=exact.toFixed(2);
+        panOutput.textContent=exact.toFixed(2);applyChannelSound(selectedVoice);
         $("paramHex").value=bytesToHex(paramBytes[selectedVoice]); updateInfo(); layoutCompositionPreview();
       });
       paramsEl.appendChild(panRow);
@@ -1905,6 +2022,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
     }
 
     function renderOutputFx() {
+      applyMasterSound();
       const p=parseOutputParams(outputParamBytes);
       $("outDistortion").value=p.distortionAmount;
       $("outDistortion").nextElementSibling.textContent=p.distortionAmount.toFixed(3);
@@ -1928,6 +2046,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       $(id).nextElementSibling.textContent=label;
       $("outputParamHex").value=bytesToHex(outputParamBytes);
       layoutCompositionPreview();
+      applyMasterSound();
     }
 
     function updateInfo() {
@@ -1948,6 +2067,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       syncCurrentText(); parsePart(PART_DATA[selectedVoice]); parseArrangement(ARRANGEMENT_DATA[selectedVoice]); parseParams(PARAM_DATA[selectedVoice]); setStatus(`channel ${selectedVoice+1}: valid`); updateInfo();
     }
     async function disposeAudio() {
+      channelRebuildTimers.forEach((timer,i)=>{clearTimeout(timer);voiceBuildIds[i]++;});
       disconnectMasterMeters();
       if (playing) stopPlayback(false); clearTransport();
       for(const v of voices){ if(!v)continue;for(const held of v.sources||[])for(const source of held.sources)source.dispose();v.sources=[]; for(const node of [v.sampler,v.delay,v.reverb,v.distortion,v.panner,v.mix,v.analyser]) try{node&&node.dispose();}catch(_){} }
@@ -2130,7 +2250,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
         ruler.onclick=e=>{const x=e.clientX-scroller.getBoundingClientRect().left;if(x<LABEL)return;setPlayhead(Math.max(0,Math.floor((x+scroller.scrollLeft-LABEL)/unit))*4*beatMs());drawCursor();};
         fragment.append(ruler);
         rows.forEach((slots,ch)=>{
-          const row=document.createElement('div');row.className='arr-track';row.dataset.channel=ch;row.classList.toggle('selected',ch===selectedVoice);row.classList.toggle('silent',!trackAudible(ch));
+          const row=document.createElement('div');row.className='arr-track';row.dataset.channel=ch;row.classList.toggle('selected',ch===selectedVoice);row.classList.toggle('silent',!trackAudible(ch));row.classList.toggle('empty-channel',!channelHasNotes(ch));
           const label=document.createElement('div');label.className='arr-track-label';
           const select=document.createElement('button');select.className='all-arr-name';select.textContent=channelNames[ch];select.title='Edit '+channelNames[ch];select.dataset.select=ch;
           select.onclick=()=>{syncCurrentText();selectedVoice=ch;renderVoice();signature='';render();};
@@ -2232,12 +2352,13 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       syncCurrentText();
       return {
         format:"BITS_TEN_CHANNEL_EDITOR_SAVE",
-        version:14,
+        version:15,
         projectName,
         saveIteration,
         importSource,
         uiTheme:{...uiTheme},
         trackMix:trackMix.map(t=>({...t})),
+        performancePads:padAssignments.map(p=>({...p})),
         parameterProtocol:"BITS_PARAMS_V4_UINT24_OFFSET_INT8_PAN_VOICE_LIMIT",
         arrangementProtocol:"BITS_ARRANGEMENT_V3_TERMINATED_MSB_BITMASK",
         sampleProtocol:"BITS_TOKEN_ID_ONLY_V1",
@@ -2255,12 +2376,13 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
           accent:ACCENT_COLOR.replace("#","0x")
         },
         outputParams:bytesToHex(outputParamBytes),
-        channels:Array.from({length:CHANNEL_COUNT},(_,i)=>({takes:recordingTakes[i],name:channelNames[i],bitTokenId:bitTokenIds[i],part:PART_DATA[i]||"",phraseBars:normalizedPhraseBars(PHRASE_BARS[i]),arrangement:encodeArrangement(parseArrangement(ARRANGEMENT_DATA[i]||"0xc0")),params:bytesToHex(paramBytes[i])}))
+        channels:Array.from({length:CHANNEL_COUNT},(_,i)=>({delaySync:{...channelDelaySync[i]},takes:recordingTakes[i],name:channelNames[i],bitTokenId:bitTokenIds[i],part:PART_DATA[i]||"",phraseBars:normalizedPhraseBars(PHRASE_BARS[i]),arrangement:encodeArrangement(parseArrangement(ARRANGEMENT_DATA[i]||"0xc0")),params:bytesToHex(paramBytes[i])}))
       };
     }
     async function restoreState(state) {
       if(!state || !Array.isArray(state.channels)) throw Error("save does not contain a channels array");
       await disposeAudio();
+      padAssignments=normalizePads(state.performancePads);
       resetTrackMix(state.trackMix);importSource=state.importSource||null;
       rememberProject(state.projectName||"Untitled",state.saveIteration||0);if(state.uiTheme)applyUITheme(state.uiTheme);playheadMs=0;
       channelNames=Array.from({length:CHANNEL_COUNT},(_,i)=>String(state.channels[i]?.name||'Channel '+(i+1)).trim().slice(0,48));
@@ -2285,7 +2407,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
           const oldOffsetHigh=p[14], oldOffsetLow=p[15];
           p[14]=0; p[15]=oldOffsetHigh; p[16]=oldOffsetLow;
         }
-        paramBytes[i]=p; PARAM_DATA[i]=bytesToHex(p);
+        paramBytes[i]=p; PARAM_DATA[i]=bytesToHex(p);channelDelaySync[i]=readDelaySync(c.delaySync);
         parsePart(PART_DATA[i]);
         parseArrangement(ARRANGEMENT_DATA[i]);
       }
@@ -2293,6 +2415,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       outputParamBytes=state.outputParams?hexToBytes(state.outputParams):new Uint8Array(DEFAULT_OUTPUT_PARAM_BYTES);
       if(outputParamBytes.length!==8)throw Error(`output FX data is ${outputParamBytes.length} bytes; expected 8`);
       BPM=Math.max(20,Math.min(400,Math.floor(Number(state.bpm??120)||120)));
+      updateSyncedDelays();
       MASTER_GAIN=Math.max(0,Math.min(1,Number(state.masterGain??.9)));
       const paletteSource=state.palette||{};
       const packedPalette=typeof paletteSource==="string"?paletteSource.replace(/^0x/i,"").replace(/^#/,""):"";
@@ -2321,29 +2444,26 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
           try{await loadBitSamples(activeChannels,$("rpcUrl").value.trim());}catch(error){sampleLoadError=error.message;}
         }
       }
-      renderVoice(); draw();
+      renderVoice(); draw();void preloadAssignedSamples();
       setStatus(sampleLoadError?`save restored; BITS audio not loaded: ${sampleLoadError}`:"save restored",Boolean(sampleLoadError));
       return sampleLoadError;
     }
-    async function loadBitSamples(channelIndices,rpc,stillCurrent=()=>true) {
-      if(!rpc) throw Error("enter an Ethereum RPC URL");
-      if(typeof ethers==="undefined") throw Error("ethers library did not load");
-      const provider=new ethers.JsonRpcProvider(rpc);
-      const contract=new ethers.Contract(BITS_ADDRESS,["function bitToBase64(uint256) view returns (string)"],provider);
-      const requested=new Map(channelIndices.map(index=>[index,bitTokenIds[index]]));
-      const uniqueTokenIds=[...new Set(requested.values())];
-      const samplesByToken=new Map();
-      await Promise.all(uniqueTokenIds.map(async tokenId=>{
-        const base64=await contract.bitToBase64(tokenId);
-        if(!base64)throw Error(`BITS #${tokenId} returned empty audio data`);
-        samplesByToken.set(tokenId,base64);
-      }));
-      if(!stillCurrent())return;
-      for(const index of channelIndices){
-        if(bitTokenIds[index]!==requested.get(index))continue;
-        SAMPLE_DATA[index]=samplesByToken.get(requested.get(index))||"";
-        waveformCache[index]=null;
-      }
+    const bitFetches=new Map();
+    async function fetchBitSound(id,rpc){
+      const key=rpc+'|'+id;if(bitSoundCache.has(key))return bitSoundCache.get(key);
+      if(!bitFetches.has(key))bitFetches.set(key,(async()=>{const contract=bitContract(rpc);try{const data=toMp3DataUrl(await contract.bitToBase64(id));if(!data)throw Error('BIT '+id+' has no audio.');bitSoundCache.set(key,data);return data;}finally{contract.runner?.destroy?.();}})().finally(()=>bitFetches.delete(key)));
+      return bitFetches.get(key);
+    }
+    async function loadBitSamples(channelIndices,rpc,stillCurrent=()=>true){
+      const requested=channelIndices.map(i=>({i,id:bitTokenIds[i]}));
+      await Promise.all(requested.map(async({i,id})=>{const data=await fetchBitSound(id,rpc);if(!stillCurrent()||bitTokenIds[i]!==id)return;SAMPLE_DATA[i]=data;waveformCache[i]=null;}));
+    }
+    let preloadGeneration=0;
+    async function preloadAssignedSamples(){
+      const generation=++preloadGeneration,rpc=$('rpcUrl').value.trim(),requested=bitTokenIds.map((id,i)=>({id,i,source:SAMPLE_DATA[i]}));let next=0,done=0,failed=0;
+      const status=$('samplePreloadStatus');const report=()=>{if(status&&generation===preloadGeneration)status.textContent=done<10?'Preparing sounds '+done+'/10…':failed?'Sounds ready · '+failed+' unavailable (retry)':'Assigned sounds preloaded';};report();
+      async function worker(){while(next<requested.length&&generation===preloadGeneration){const {id,i,source}=requested[next++];try{const data=source||await fetchBitSound(id,rpc);await loadSampleWithOffset(toMp3DataUrl(data),0);if(generation===preloadGeneration&&id===bitTokenIds[i]&&source===SAMPLE_DATA[i]){SAMPLE_DATA[i]=data;if(i===selectedVoice)$('sampleInput').value=data;}}catch(e){failed++;}done++;report();}}
+      await Promise.all([worker(),worker()]);
     }
     async function loadBitFromContract() {
       if(soundLoading||recordPreparing||tl.record)return;
@@ -2401,10 +2521,10 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       queueLiveRefresh();updateInfo();
       layoutCompositionPreview();
     });
-    $("arrangementInput").addEventListener("input",()=>{updateInfo();try{parseArrangement($("arrangementInput").value);ARRANGEMENT_DATA[selectedVoice]=$("arrangementInput").value.trim();layoutCompositionPreview();}catch(_){}});
+    $("arrangementInput").addEventListener("input",()=>{updateInfo();try{parseArrangement($("arrangementInput").value);ARRANGEMENT_DATA[selectedVoice]=$("arrangementInput").value.trim();queueLiveRefresh();layoutCompositionPreview();}catch(_){}});
     $("arrangementPattern").addEventListener("input",e=>{try{setCurrentArrangement(parseArrangementPattern(e.target.value),false);}catch(_){e.target.nextElementSibling.textContent="invalid";}});
     $("phraseBars").addEventListener("input",e=>{const bars=normalizedPhraseBars(e.target.value);PHRASE_BARS[selectedVoice]=bars;queueLiveRefresh();e.target.nextElementSibling.textContent=`${bars} ${bars===1?"bar":"bars"}`;updateInfo();layoutCompositionPreview();});
-    $("clearSample").onclick=()=>{$("sampleInput").value="";SAMPLE_DATA[selectedVoice]="";waveformCache[selectedVoice]=null;waveformJob++;updateInfo();drawWaveform();};
+    $("clearSample").onclick=()=>{$("sampleInput").value="";SAMPLE_DATA[selectedVoice]="";disposePerformanceVoice(selectedVoice);waveformCache[selectedVoice]=null;waveformJob++;updateInfo();drawWaveform();};
     $("loadBit").onclick=async()=>{try{await loadBitFromContract();}catch(e){setStatus(`BITS load failed: ${e.message}`,true);}};
     $("validatePart").onclick=()=>{try{validateCurrent();}catch(e){setStatus(e.message,true);}};
     $("validateArrangement").onclick=()=>{try{const slots=parseArrangement($("arrangementInput").value);setCurrentArrangement(slots);setStatus(`channel ${selectedVoice+1} arrangement loaded`);}catch(e){setStatus(e.message,true);}};
@@ -2416,14 +2536,14 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
     $("arrangementAllOn").onclick=()=>{try{const slots=parseArrangement($("arrangementInput").value).fill(true);setCurrentArrangement(slots);setStatus("all arrangement slots set to play");}catch(e){setStatus(e.message,true);}};
     $("arrangementAllOff").onclick=()=>{try{const slots=parseArrangement($("arrangementInput").value).fill(false);setCurrentArrangement(slots);setStatus("all arrangement slots set to rest");}catch(e){setStatus(e.message,true);}};
     $("buildRepeats").onclick=()=>{try{const repeats=Math.floor(Number($("repeatCount").value));if(!Number.isSafeInteger(repeats)||repeats<1)throw Error("repeat count must be a positive whole number");setCurrentArrangement(Array(repeats).fill(true));setStatus(`built ${repeats} continuous repeats`);}catch(e){setStatus(e.message,true);}};
-    $("loadParamHex").onclick=()=>{try{const b=hexToBytes($("paramHex").value);if(b.length!==24)throw Error(`parameter data must be exactly 24 bytes; got ${b.length}`);paramBytes[selectedVoice]=b;PARAM_DATA[selectedVoice]=bytesToHex(b);renderParams();updateInfo();drawWaveform();layoutCompositionPreview();setStatus("parameter bytes loaded into dials");}catch(e){setStatus(e.message,true);}};
-    $("defaults").onclick=()=>{paramBytes[selectedVoice]=new Uint8Array(DEFAULT_PARAM_BYTES);renderParams();updateInfo();drawWaveform();layoutCompositionPreview();setStatus("defaults restored");};
+    $("loadParamHex").onclick=()=>{try{const b=hexToBytes($("paramHex").value);if(b.length!==24)throw Error(`parameter data must be exactly 24 bytes; got ${b.length}`);paramBytes[selectedVoice]=b;channelDelaySync[selectedVoice].enabled=false;PARAM_DATA[selectedVoice]=bytesToHex(b);applyChannelSound(selectedVoice);updateVoiceLimit(selectedVoice);renderParams();updateInfo();drawWaveform();layoutCompositionPreview();setStatus("parameter bytes loaded into dials");}catch(e){setStatus(e.message,true);}};
+    $("defaults").onclick=()=>{paramBytes[selectedVoice]=new Uint8Array(DEFAULT_PARAM_BYTES);channelDelaySync[selectedVoice]={enabled:true,beats:.5};updateSyncedDelays();applyChannelSound(selectedVoice);updateVoiceLimit(selectedVoice);renderParams();updateInfo();drawWaveform();layoutCompositionPreview();setStatus("defaults restored");};
     $("allMono").onclick=()=>{for(let i=0;i<CHANNEL_COUNT;i++){paramBytes[i][18]=1;updateVoiceLimit(i);PARAM_DATA[i]=bytesToHex(paramBytes[i]);}renderParams();updateInfo();layoutCompositionPreview();setStatus("all 10 channels set to monophonic");};
     $("outDistortion").oninput=e=>{const b=clampByte(Number(e.target.value)*255);updateOutputControl("outDistortion",0,b,(b/255).toFixed(3));};
     $("outOversample").onchange=e=>{const b=clampByte(e.target.value);updateOutputControl("outOversample",1,b,["none","2x","4x"][Math.min(2,b)]);};
     $("outDistortionWet").oninput=e=>{const b=clampByte(Number(e.target.value)*255);updateOutputControl("outDistortionWet",2,b,(b/255).toFixed(3));};
     $("outFilterType").onchange=e=>{const b=clampByte(e.target.value);updateOutputControl("outFilterType",3,b,["bypass","lowpass","highpass","bandpass"][Math.min(3,b)]);};
-    $("outFilterCutoff").oninput=e=>{const n=encodeFilterCutoff(e.target.value);outputParamBytes[4]=(n>>8)&255;outputParamBytes[5]=n&255;const hz=Math.round(decodeFilterCutoff(n));e.target.nextElementSibling.textContent=`${hz}Hz`;$("outputParamHex").value=bytesToHex(outputParamBytes);layoutCompositionPreview();};
+    $("outFilterCutoff").oninput=e=>{const n=encodeFilterCutoff(e.target.value);outputParamBytes[4]=(n>>8)&255;outputParamBytes[5]=n&255;const hz=Math.round(decodeFilterCutoff(n));e.target.nextElementSibling.textContent=`${hz}Hz`;$("outputParamHex").value=bytesToHex(outputParamBytes);applyMasterSound();layoutCompositionPreview();};
     $("outFilterQ").oninput=e=>{const b=clampByte(Number(e.target.value)/20*255);updateOutputControl("outFilterQ",6,b,mapByte(b,0,20).toFixed(2));};
     $("outFilterRolloff").onchange=e=>{const b=Math.min(3,clampByte(e.target.value));updateOutputControl("outFilterRolloff",7,b,`${[-12,-24,-48,-96][b]}dB/oct`);};
     $("loadOutputHex").onclick=()=>{try{const b=hexToBytes($("outputParamHex").value);if(b.length!==8)throw Error(`output FX data must be exactly 8 bytes; got ${b.length}`);outputParamBytes=b;renderOutputFx();layoutCompositionPreview();setStatus("output FX bytes loaded");}catch(e){setStatus(e.message,true);}};
@@ -2512,18 +2632,18 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
         for(const {i,kind,value} of changes){
           if(kind==='part'){tl.undo[i].push(PART_DATA[i]||'');tl.redo[i]=[];PART_DATA[i]=value;recordingTakes[i]=validateTakes(state.channels[i].takes);}
           if(kind==='arr'){if(has(value,'arrangement'))ARRANGEMENT_DATA[i]=value.arrangement;if(has(value,'phraseBars'))PHRASE_BARS[i]=value.phraseBars;}
-          if(kind==='params'){paramBytes[i]=value;PARAM_DATA[i]=bytesToHex(value);}
+          if(kind==='params'){paramBytes[i]=value;PARAM_DATA[i]=bytesToHex(value);channelDelaySync[i]=readDelaySync(state.channels[i].delaySync);}
           if(kind==='sample'){if(value.id!==null)bitTokenIds[i]=value.id;SAMPLE_DATA[i]=value.sample??'';waveformCache[i]=null;if(value.sample===null&&value.id!==null)sampleLoads.push(i);}
         }
         if(has(globals,'outputParams'))outputParamBytes=globals.outputParams;
-        if(has(globals,'bpm'))BPM=globals.bpm;if(has(globals,'masterGain'))MASTER_GAIN=globals.masterGain;
+        if(has(globals,'bpm'))BPM=globals.bpm;updateSyncedDelays();if(has(globals,'masterGain'))MASTER_GAIN=globals.masterGain;
         if(globals.palette){BG_COLOR=globals.palette.background??BG_COLOR;INK_COLOR=globals.palette.ink??INK_COLOR;ACCENT_COLOR=globals.palette.accent??ACCENT_COLOR;}
         if(has(globals,'rpcUrl'))$('rpcUrl').value=globals.rpcUrl;
         $('bpm').value=BPM;$('bpm').nextElementSibling.textContent=`${BPM} BPM`;$('masterGain').value=MASTER_GAIN;$('masterGain').nextElementSibling.textContent=MASTER_GAIN.toFixed(2);
         for(const [id,out,v] of [['bgColor','bgOut',BG_COLOR],['inkColor','inkOut',INK_COLOR],['accentColor','accentOut',ACCENT_COLOR]]){$(id).value=v;$(out).textContent=v;}
         importSource=state.importSource||null;rememberProject(state.projectName||name.replace(/\.json$/i,''),state.saveIteration||0);playheadMs=0;tl.drag=null;applyPalette();renderOutputFx();renderVoice();draw();$('importDialog').close();
         let warning='';if(sampleLoads.length){try{await loadBitSamples(sampleLoads,$('rpcUrl').value.trim());renderVoice();}catch(e){warning=`; audio load failed: ${e.message}`;}}
-        setStatus(`Imported selected items from ${name}${warning}`,!!warning);
+        setStatus(`Imported selected items from ${name}${warning}`,!!warning);void preloadAssignedSamples();
       }catch(e){$('importError').textContent=e.message;}finally{button.disabled=false;}
     };
 
@@ -2547,7 +2667,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
     function tlEncode(a){const b=[];for(const n of a){const t=Math.round(n.startMs),d=Math.round(n.durationMs);if(t<0||t>0xffffff||d<0||d>65535)throw Error('Note exceeds protocol timing range.');b.push(n.note,t>>16&255,t>>8&255,t&255,d>>8&255,d&255,n.vel);}return bytesToHex(b);}
     function timelineRefresh(){
       if(!document.getElementById('tlRoll'))return;
-      if(tl.record && tl.record.channel!==selectedVoice)tlFinishRecord();
+      if(tl.record && !tl.record.multi && tl.record.channel!==selectedVoice)tlFinishRecord();
       const source=PART_DATA[selectedVoice]||'';
       if(tl.channel!==selectedVoice||tl.source!==source){tl.channel=selectedVoice;tl.source=source;tl.selected.clear();try{tl.notes=tlDecode(source);tl.invalid=false;tlMessage('Edits update part hex immediately. Playback uses the arrangement.');}catch(e){tl.notes=[];tl.invalid=true;tlMessage(e.message+' Fix the hex to enable editing.');}}
       $('tlTitle').textContent=channelNames[selectedVoice]+' · PART A';
@@ -2731,7 +2851,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       if(performanceHeld.has(key))performOff(key,now);
       const ch=channelOverride??tl.record?.channel??selectedVoice,r=tl.record,held={ch,n,v};
       performanceHeld.set(key,held);refreshPerformanceKeys();
-      if(r&&now>=r.start&&now<r.start+r.length*r.passes)r.held.set(key,{note:n,vel:v,time:now});
+      if(r&&now>=r.start&&now<r.start+r.length*r.passes)r.held.set(key,{ch,note:n,vel:v,time:now});
       try{
         const voice=await preparePerformance(ch);
         if(performanceHeld.get(key)!==held||!voice||voices[ch]!==voice)return;
@@ -2752,9 +2872,123 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
     function refreshPerformanceKeys(){
       document.querySelectorAll('[data-perform-note]').forEach(b=>b.classList.toggle('held',[...performanceHeld.values()].some(h=>h.n===Number(b.dataset.performNote))));
     }
+
+    function normalizePads(value){
+      return Array.from({length:CHANNEL_COUNT},(_,i)=>{
+        const p=value?.[i];return {channel:Number.isInteger(p?.channel)&&p.channel>=0&&p.channel<CHANNEL_COUNT?p.channel:i%CHANNEL_COUNT,note:Number.isInteger(p?.note)&&p.note>=0&&p.note<=127?p.note:60};
+      });
+    }
+    let padAssignments=normalizePads();
+    const padCodes=['Digit1','Digit2','Digit3','Digit4','Digit5','Digit6','Digit7','Digit8','Digit9','Digit0'];
+    function firePad(index,key,velocity=100,now=performance.now()){
+      const p=padAssignments[index];if(!p)return;
+      performOn(key,p.note,velocity,now,p.channel);
+    }
+    function finishOverdubRecording(r){
+      let channels=0,hits=0;
+      for(let ch=0;ch<CHANNEL_COUNT;ch++){
+        const notes=r.notes.filter(n=>n.ch===ch).map(({ch,pass,...n})=>n);if(!notes.length)continue;
+        const previous=PART_DATA[ch]||'';
+        tl.undo[ch].push(previous);if(tl.undo[ch].length>100)tl.undo[ch].shift();tl.redo[ch]=[];
+        PART_DATA[ch]=tlEncode([...tlDecode(previous),...notes].sort((a,b)=>a.startMs-b.startMs));
+        PHRASE_BARS[ch]=r.bars;if(voices[ch])voices[ch].events=parsePart(PART_DATA[ch]);channels++;hits+=notes.length;
+      }
+      $('partInput').value=PART_DATA[selectedVoice];$('phraseBars').value=PHRASE_BARS[selectedVoice];
+      renderVoice();timelineRefresh();updateInfo();layoutCompositionPreview();
+      tlMessage(hits?'Added '+hits+' notes across '+channels+' channel'+(channels===1?'':'s')+'. Existing notes kept. Undo is available on each channel.':'No notes recorded.');
+    }
+
+    function validateBitPreset(state){
+      if(state?.format!=='BITS_SOUND_PRESET'||state.version!==1||!Array.isArray(state.bitTokenIds)||state.bitTokenIds.length!==CHANNEL_COUNT)throw Error('Choose a BITS sound preset with exactly 10 BIT numbers.');
+      if(state.bitTokenIds.some(id=>!Number.isInteger(id)||id<1||id>65535))throw Error('BIT numbers must be integers from 1 to 65535.');
+      return state.bitTokenIds.slice();
+    }
+    function randomBitNumbers(min,max){
+      if(!Number.isInteger(min)||!Number.isInteger(max)||min<1||max>65535||min>max)throw Error('Enter a valid random BIT range (1–65535).');
+      return Array.from({length:CHANNEL_COUNT},()=>min+Math.floor(Math.random()*(max-min+1)));
+    }
+    async function applyBitPreset(ids){
+      if(soundLoading||recordPreparing||audioLoading||tl.record)throw Error('Stop recording or wait for sounds to finish loading first.');
+      soundLoading=true;const status=$('bitPresetStatus');status.textContent='Loading 10 sounds…';
+      try{
+        stopPerformance();stopBitPreview();syncCurrentText();
+        if(performanceReady)await performanceReady;
+        const rpc=$('rpcUrl').value.trim();
+        // Validate and fetch every requested sound before changing any channel.
+        const data=await Promise.all(ids.map(id=>fetchBitSound(id,rpc)));
+        await Promise.all(data.map(src=>loadSampleWithOffset(toMp3DataUrl(src),0)));
+        stopPlayback();await disposeAudio();preloadGeneration++;
+        bitTokenIds=ids.slice();for(let ch=0;ch<CHANNEL_COUNT;ch++){SAMPLE_DATA[ch]=data[ch];waveformCache[ch]=null;}
+        renderVoice();status.textContent='10 BIT sounds loaded. Notes and channel settings kept.';
+      }finally{soundLoading=false;}
+    }
+    function setupBitPresets(){
+      const row=document.createElement('div');row.className='performance-toolbar';row.id='bitPresetControls';
+      row.innerHTML='<button id="saveBitPreset">Save BIT preset</button><button id="loadBitPreset">Load BIT preset</button><input id="bitPresetFile" type="file" accept=".json,application/json" hidden><button id="randomBits">Random BITs</button><label>IDs <input id="randomBitMin" type="number" min="1" max="65535" value="1" style="width:53px" aria-label="Minimum random BIT ID">–<input id="randomBitMax" type="number" min="1" max="65535" value="48" style="width:53px" aria-label="Maximum random BIT ID"></label><span id="bitPresetStatus" class="tiny" role="status"></span>';
+      $('performancePanel').append(row);
+      $('saveBitPreset').onclick=()=>{try{const state={format:'BITS_SOUND_PRESET',version:1,bitTokenIds:bitTokenIds.slice()};validateBitPreset(state);const url=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='bits-sound-preset.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$('bitPresetStatus').textContent='BIT preset saved.';}catch(e){$('bitPresetStatus').textContent=e.message;}};
+      $('loadBitPreset').onclick=()=>$('bitPresetFile').click();
+      $('bitPresetFile').onchange=async e=>{const file=e.target.files?.[0];e.target.value='';if(!file)return;try{await applyBitPreset(validateBitPreset(JSON.parse(await file.text())));}catch(err){$('bitPresetStatus').textContent='Preset: '+err.message;}};
+      $('randomBits').onclick=async()=>{try{await applyBitPreset(randomBitNumbers(Number($('randomBitMin').value),Number($('randomBitMax').value)));}catch(err){$('bitPresetStatus').textContent='Random BITs: '+err.message;}};
+      setInterval(()=>{const busy=soundLoading||recordPreparing||audioLoading||!!tl.record;for(const id of ['loadBitPreset','randomBits','saveBitPreset'])$(id).disabled=busy;},150);
+    }
+
+    function setupPerformWindow(){
+      const panel=document.createElement('section');panel.id='performWindow';panel.hidden=true;
+      panel.innerHTML='<div class="performance-toolbar"><label>Record bars <input id="padBars" type="number" min="1" max="255" value="4" style="width:55px"></label><label>Velocity <input id="padVelocity" type="number" min="1" max="127" value="100" style="width:55px"></label><button id="preparePads">Prepare pads</button><button id="panicPads">All notes off</button></div><div id="padGrid" aria-label="Ten performance pads"></div><p id="padStatus" role="status">Play multiple pads together. Record uses a one-bar count-in and adds hits to their assigned channels.</p><p class="studio-note">Keys: 1 2 3 4 5 / 6 7 8 9 0 (top row or numpad). MIDI notes 36–45 trigger pads 1–10. Channel chooses the sound; note sets pitch (60 = original sample). Recorded notes overlay the current parts. Record length uses at least the longest assigned phrase.</p>';
+      $('stage').append(panel);
+      const tab=document.createElement('button');tab.id='viewPerform';tab.textContent='Perform';$('viewCanvas').before(tab);
+      for(const id of ['viewTimeline','viewArrangement','viewCanvas']){
+        const original=$(id).onclick;$(id).onclick=()=>{stopPerformance();if(tl.record?.multi)tlFinishRecord();panel.hidden=true;tab.classList.remove('active');$('performancePanel').classList.remove('pad-mode');original();};
+      }
+      tab.onclick=()=>{
+        stopPerformance();tlFinishRecord();$('timeline').hidden=true;$('allArrangement').hidden=true;$('compositionPreview').style.visibility='hidden';
+        panel.hidden=false;for(const id of ['viewTimeline','viewArrangement','viewCanvas'])$(id).classList.remove('active');tab.classList.add('active');
+        $('performancePanel').hidden=false;$('performancePanel').classList.add('pad-mode');
+        $('workspaceLabel').innerHTML='Performance pads<small>10 pads · record across channels</small>';refreshPads();
+      };
+      function refreshPads(){
+        if(panel.hidden)return;
+        [...$('padGrid').children].forEach((slot,i)=>{
+          const p=padAssignments[i],hit=slot.firstChild,select=slot.querySelector('select'),pitch=slot.querySelector('input');
+          hit.classList.toggle('held',[...performanceHeld.values()].some(h=>h.ch===p.channel&&h.n===p.note));
+          hit.querySelector('strong').textContent=channelNames[p.channel];
+          hit.lastChild.textContent='BIT '+bitTokenIds[p.channel]+' · '+noteLabel(p.note);
+          [...select.options].forEach((o,ch)=>o.textContent=(ch+1)+' · '+channelNames[ch]+' / BIT '+bitTokenIds[ch]);
+          if(document.activeElement!==select)select.value=p.channel;if(document.activeElement!==pitch)pitch.value=p.note;
+          select.disabled=pitch.disabled=!!tl.record||recordPreparing;
+        });
+        $('preparePads').disabled=recordPreparing||!!tl.record||soundLoading||audioLoading;
+      }
+      for(let i=0;i<CHANNEL_COUNT;i++){
+        const slot=document.createElement('div');slot.className='pad-slot';
+        const hit=document.createElement('button');hit.className='pad-hit';hit.type='button';hit.innerHTML='<span>PAD '+String(i+1).padStart(2,'0')+' · '+padCodes[i].replace(/Digit|Key/g,'')+'</span><strong></strong><span></span>';hit.setAttribute('aria-label','Play pad '+(i+1));
+        hit.onpointerdown=e=>{if(e.button!==0&&e.pointerType==='mouse')return;e.preventDefault();hit.setPointerCapture(e.pointerId);firePad(i,'pad-pointer:'+e.pointerId,bound(Number($('padVelocity').value)||100,1,127));refreshPads();};
+        hit.onpointerup=hit.onpointercancel=hit.onlostpointercapture=e=>{performOff('pad-pointer:'+e.pointerId);refreshPads();};
+        const config=document.createElement('div');config.className='pad-config';
+        const select=document.createElement('select');select.setAttribute('aria-label','Pad '+(i+1)+' channel');
+        for(let ch=0;ch<CHANNEL_COUNT;ch++){const o=document.createElement('option');o.value=ch;select.append(o);}
+        select.onchange=()=>{stopPerformance();padAssignments[i].channel=Number(select.value);refreshPads();};
+        const pitch=document.createElement('input');pitch.type='number';pitch.min=0;pitch.max=127;pitch.setAttribute('aria-label','Pad '+(i+1)+' MIDI note');
+        pitch.onchange=()=>{stopPerformance();padAssignments[i].note=bound(Math.round(Number(pitch.value)||0),0,127);refreshPads();};
+        config.append(select,pitch);slot.append(hit,config);$('padGrid').append(slot);
+      }
+      window.addEventListener('keydown',e=>{
+        if(panel.hidden||e.ctrlKey||e.metaKey||e.altKey||e.isComposing||document.querySelector('dialog[open]')||e.target.closest('input,textarea,select,[contenteditable=true]'))return;
+        const code=/^Numpad[0-9]$/.test(e.code)?e.code.replace('Numpad','Digit'):e.code;
+        const i=padCodes.indexOf(code);if(i<0)return;e.preventDefault();e.stopImmediatePropagation();
+        if(!e.repeat)firePad(i,'pad-key:'+e.code,bound(Number($('padVelocity').value)||100,1,127));refreshPads();
+      },true);
+      window.addEventListener('keyup',e=>{const key='pad-key:'+e.code;if(performanceHeld.has(key)){e.preventDefault();performOff(key);refreshPads();}},true);
+      $('preparePads').onclick=async()=>{try{await Tone.start();$('padStatus').textContent='Preparing assigned sounds…';for(const ch of new Set(padAssignments.map(p=>p.channel)))await preparePerformance(ch);$('padStatus').textContent='Pads ready. Play or press Record.';}catch(e){$('padStatus').textContent='Preparing pads: '+e.message;}};
+      $('panicPads').onclick=()=>{stopPerformance();releaseAll();refreshPads();};
+      const oldMessage=tlMessage;tlMessage=message=>{oldMessage(message);if(!panel.hidden)$('padStatus').textContent=message;};
+      setInterval(refreshPads,80);
+    }
+
     function setupPerformance(){
       const box=document.createElement('div');box.id='performancePanel';
-      box.innerHTML='<div class="performance-toolbar"><button id="performanceToggle" aria-expanded="true" aria-controls="performanceBody">▾ Keyboard</button><button id="chooseSound">Choose BIT…</button><span id="instrumentReady" role="status"></span><button id="prepareInstrument" title="Load the selected instrument for playing">Prepare</button></div><div id="performanceBody"><div class="performance-toolbar"><label><input id="computerKeys" type="checkbox"> Computer keys</label><button id="octaveDown" aria-label="Octave down">−</button><span id="performanceOctave" title="Computer keyboard octave"></span><button id="octaveUp" aria-label="Octave up">+</button><details id="performanceOptions"><summary>Input settings</summary><div class="performance-toolbar"><label>Velocity <input id="performanceVelocity" type="number" min="1" max="127" value="100"></label><button id="performancePanic">All notes off</button></div><p>Computer keys: A W S E D F T G Y H U J K. The marked keys follow the octave selector. Record captures the selected channel after a one-bar count-in. Loop takes repeats its phrase with backing tracks; each pass is kept separately until you apply it.</p></details></div><div id="performanceKeys" aria-label="Four-octave performance keyboard"></div></div>';
+      box.innerHTML='<div class="performance-toolbar"><button id="performanceToggle" aria-expanded="true" aria-controls="performanceBody">▾ Keyboard</button><button id="chooseSound">Choose BIT…</button><span id="instrumentReady" role="status"></span><button id="prepareInstrument" title="Load the selected instrument for playing">Prepare</button></div><div id="performanceBody"><div class="performance-toolbar"><label><input id="computerKeys" type="checkbox"> Computer keys</label><button id="octaveDown" aria-label="Octave down">−</button><span id="performanceOctave" title="Computer keyboard octave"></span><button id="octaveUp" aria-label="Octave up">+</button><details id="performanceOptions"><summary>Input settings</summary><div class="performance-toolbar"><label>Velocity <input id="performanceVelocity" type="number" min="1" max="127" value="100"></label><button id="performancePanic">All notes off</button></div><p>Computer keys: A W S E D F T G Y H U J K. The marked keys follow the octave selector. Record overlays the selected channel after a one-bar count-in, while all current notes play. New notes are added directly; Undo restores the previous part.</p></details></div><div id="performanceKeys" aria-label="Four-octave performance keyboard"></div></div>';
       $('stage').append(box);
       // Keep record available even with the keyboard collapsed; tuck MIDI setup away.
       $('performanceToggle').after($('tlRecord'));
@@ -2799,7 +3033,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       $('performancePanic').onclick=()=>{stopPerformance();releaseAll();};
       $('prepareInstrument').onclick=async()=>{try{$('instrumentReady').textContent='Loading…';await preparePerformance(selectedVoice);}catch(e){setStatus(e.message,true);}};
       window.addEventListener('keydown',e=>{
-        if(!$('computerKeys').checked||e.ctrlKey||e.metaKey||e.altKey||e.isComposing||document.querySelector('dialog[open]')||e.target.closest('input,textarea,select,[contenteditable=true]'))return;
+        if(!$('performWindow').hidden||!$('computerKeys').checked||e.ctrlKey||e.metaKey||e.altKey||e.isComposing||document.querySelector('dialog[open]')||e.target.closest('input,textarea,select,[contenteditable=true]'))return;
         const index=codes.indexOf(e.code);if(index<0)return;e.preventDefault();e.stopImmediatePropagation();
         if(!e.repeat)performOn('computer:'+e.code,base+index,bound(Number($('performanceVelocity').value)||100,1,127));
       },true);
@@ -2812,16 +3046,16 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
 
       const dialog=document.createElement('dialog');dialog.id='soundChooser';
       dialog.innerHTML='<h2>Choose a BIT</h2><p id="soundTarget">Click artwork to audition. Use sound assigns it to the channel.</p><div class="performance-toolbar"><button id="soundPrev">←</button><span id="soundBank"></span><button id="soundNext">→</button><label>BIT ID <input id="soundChoice" type="number" min="1" max="65535" value="1"></label></div><div id="soundGrid"></div><div id="recentSounds"></div><p id="soundStatus" role="status"></p><div class="actions"><button id="auditionSound">▶ Audition</button><button id="useSound">Use sound</button><button id="closeSounds">Close</button></div>';
-      document.body.append(dialog);const browse=document.createElement('button');browse.id='browseSoundsInspector';browse.textContent='Choose BIT…';browse.style.marginBottom='10px';browse.onclick=()=>$('chooseSound').click();$('bitArtworkButton').before(browse);let bank=0,choice=1,job=0,channel=0,artGeneration=0;const preview=new Audio();let recent=[];
+      document.body.append(dialog);const browse=document.createElement('button');browse.id='browseSoundsInspector';browse.textContent='Choose BIT…';browse.style.marginBottom='10px';browse.onclick=()=>$('chooseSound').click();$('bitArtworkButton').before(browse);let bank=0,choice=1,job=0,channel=0,artGeneration=0,quickGeneration=0;const preview=new Audio();let recent=[];
       try{recent=JSON.parse(localStorage.getItem('bits-recent-sounds')||'[]').filter(n=>Number.isInteger(n)&&n>0&&n<=65535).slice(0,12);}catch(_){}
       function selectCard(){
         for(const b of $('soundGrid').children)b.setAttribute('aria-pressed',String(Number(b.dataset.bitId)===choice));
       }
-      async function loadChoiceArt(cards,generation,rpc){
-        let next=0;
+      async function loadChoiceArt(cards,generation,rpc,quick=false){
+        const current=()=>generation===(quick?quickGeneration:artGeneration);let next=0;
         // Limit RPC work while allowing the first cards to appear quickly.
         async function worker(){
-          while(next<cards.length&&generation===artGeneration){
+          while(next<cards.length&&current()){
             const {id,img,label}=cards[next++],key=rpc+'|'+id;
             try{
               let src=bitArtCache.get(key);
@@ -2834,11 +3068,11 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
                   src=bitImageUrl(await renderer.tokenToSvg(id));bitArtCache.set(key,src);
                 }finally{contract.runner?.destroy?.();}
               }
-              if(generation!==artGeneration)return;
-              img.onload=()=>{if(generation!==artGeneration)return;img.hidden=false;label.hidden=true;};
-              img.onerror=()=>{if(generation!==artGeneration)return;bitArtCache.delete(key);label.textContent='No artwork';};
+              if(!current())return;
+              img.onload=()=>{if(!current())return;img.hidden=false;label.hidden=true;};
+              img.onerror=()=>{if(!current())return;bitArtCache.delete(key);label.textContent='No artwork';};
               img.src=src;
-            }catch(e){if(generation===artGeneration)label.textContent='No artwork';}
+            }catch(e){if(current())label.textContent='No artwork';}
           }
         }
         await Promise.all([worker(),worker(),worker()]);
@@ -2857,27 +3091,44 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
         void loadChoiceArt(cards,generation,$('rpcUrl').value.trim());
         $('recentSounds').replaceChildren();for(const id of recent){const b=document.createElement('button');b.textContent='Recent: '+id;b.onclick=()=>{choice=id;bank=Math.floor((id-1)/16);$('soundChoice').value=id;drawChoices();audition();};$('recentSounds').append(b);}
       }
-      async function sound(id){const rpc=$('rpcUrl').value.trim(),key=rpc+'|'+id;let value=bitSoundCache.get(key);if(!value){value=toMp3DataUrl(await bitContract(rpc).bitToBase64(id));if(!value)throw Error('This BIT has no audio.');bitSoundCache.set(key,value);}return value;}
-      async function audition(){const thisJob=++job;preview.pause();$('soundStatus').textContent='Loading BIT '+choice+'…';try{const id=choice,data=await sound(id);if(thisJob!==job||!dialog.open)return;preview.src=data;await preview.play();$('soundStatus').textContent='Auditioning BIT '+id+' · original sound · Use sound to assign';}catch(e){if(thisJob===job)$('soundStatus').textContent=e.message;}}
+      async function sound(id){return fetchBitSound(id,$('rpcUrl').value.trim());}
+      async function audition(){const thisJob=++job;preview.pause();$('soundStatus').textContent='Loading BIT '+choice+'…';try{const id=choice,data=await sound(id);if(thisJob!==job)return;preview.src=data;await preview.play();setStatus('Auditioning BIT '+id+' · click Load to assign');$('soundStatus').textContent='Auditioning BIT '+id+' · original sound · Use sound to assign';}catch(e){if(thisJob===job)$('soundStatus').textContent=e.message;}}
       $('chooseSound').onclick=()=>{stopBitPreview();stopPerformance();channel=selectedVoice;choice=Math.max(1,bitTokenIds[channel]);bank=Math.floor((choice-1)/16);$('soundChoice').value=choice;drawChoices();$('soundTarget').textContent=channelNames[channel]+' currently uses BIT '+bitTokenIds[channel]+'. Click artwork to audition; Use sound assigns it.';$('soundStatus').textContent='Selected BIT '+choice+'. Not assigned until you press Use sound.';dialog.showModal();};
       $('soundChoice').onchange=()=>{job++;preview.pause();$('soundStatus').textContent='Selection changed · click Audition to hear it, or Use sound to assign it.';choice=bound(Math.floor(Number($('soundChoice').value)||1),1,65535);$('soundChoice').value=choice;bank=Math.floor((choice-1)/16);drawChoices();};
       $('soundPrev').onclick=()=>{job++;preview.pause();bank=Math.max(0,bank-1);drawChoices();};$('soundNext').onclick=()=>{job++;preview.pause();bank=Math.min(4095,bank+1);drawChoices();};
       $('auditionSound').onclick=audition;$('closeSounds').onclick=()=>dialog.close();
       dialog.addEventListener('close',()=>{job++;artGeneration++;preview.pause();preview.removeAttribute('src');});
-      $('useSound').onclick=async()=>{
-        if(soundLoading)return;soundLoading=true;$('useSound').disabled=true;const id=choice,thisJob=++job;preview.pause();
+      async function assignSound(id=choice,target=channel){
+        if(soundLoading||tl.record||recordPreparing)return;soundLoading=true;$('useSound').disabled=true;const thisJob=++job;preview.pause();
         try{
-          await Tone.start();const data=await sound(id);if(thisJob!==job||!dialog.open)return;
+          await Tone.start();const data=await sound(id);if(thisJob!==job)return;
           stopPerformance();if(performanceReady)await performanceReady;
-          await loadSampleWithOffset(data,0);disposePerformanceVoice(channel);
-          bitTokenIds[channel]=id;SAMPLE_DATA[channel]=data;paramBytes[channel][14]=paramBytes[channel][15]=paramBytes[channel][16]=0;waveformCache[channel]=null;if(channel===selectedVoice)renderVoice();
-          if(audioReady)await createAudioVoice(channel);else await initAudio();
-          if(playing)rebuildVoicePart(channel);
+          await loadSampleWithOffset(data,0);disposePerformanceVoice(target);
+          bitTokenIds[target]=id;SAMPLE_DATA[target]=data;paramBytes[target][14]=paramBytes[target][15]=paramBytes[target][16]=0;waveformCache[target]=null;if(target===selectedVoice)renderVoice();
+          if(audioReady)await createAudioVoice(target);else await initAudio();
+          if(playing)rebuildVoicePart(target);
           recent=[id,...recent.filter(n=>n!==id)].slice(0,12);try{localStorage.setItem('bits-recent-sounds',JSON.stringify(recent));}catch(_){}
-          dialog.close();setStatus('BIT '+id+' ready on '+channelNames[channel]);
-        }catch(e){$('soundStatus').textContent='Load failed: '+e.message;}
+          if(dialog.open)dialog.close();setStatus('BIT '+id+' ready on '+channelNames[target]);
+        }catch(e){$('soundStatus').textContent='Load failed: '+e.message;setStatus('Load failed: '+e.message,true);}
         finally{soundLoading=false;$('useSound').disabled=false;}
       };
+      $('useSound').onclick=()=>assignSound();
+      const shelf=document.createElement('section');shelf.id='soundShelf';shelf.innerHTML='<div class="section-title">SOUNDS <span id="shelfTarget"></span></div><div class="performance-toolbar"><button id="shelfPrev">←</button><span id="shelfBank"></span><button id="shelfNext">→</button><button id="shelfMore">Browse all…</button></div><div id="quickSoundGrid"></div>';
+      $('browseSoundsInspector').before(shelf);$('browseSoundsInspector').hidden=true;
+      const soundDetails=document.createElement('details');soundDetails.innerHTML='<summary>Selected sound details / manual ID</summary>';const artwork=$('bitArtworkButton'),previewStatus=$('bitPreviewStatus'),artActions=previewStatus.nextElementSibling,idRow=$('bitTokenId').closest('.param');artwork.before(soundDetails);soundDetails.append(artwork,previewStatus,artActions,idRow);
+      let shelfBank=0;
+      function drawShelf(){const generation=++quickGeneration,cards=[];$('quickSoundGrid').replaceChildren();$('shelfBank').textContent=(shelfBank*16+1)+'–'+Math.min(65535,shelfBank*16+16);$('shelfPrev').disabled=shelfBank===0;$('shelfNext').disabled=shelfBank===4095;
+        for(let id=shelfBank*16+1;id<=Math.min(65535,shelfBank*16+16);id++){
+          const card=document.createElement('div');card.className='quick-sound';card.dataset.id=id;
+          const listen=document.createElement('button');listen.className='sound-art';listen.title='Audition BIT '+id;listen.setAttribute('aria-label',listen.title);
+          const img=document.createElement('img');img.alt='BIT '+id;img.hidden=true;const label=document.createElement('span');label.textContent='…';listen.append(img,label);
+          listen.onclick=()=>{choice=id;audition();};const use=document.createElement('button');use.textContent='Load '+id;use.title='Load BIT '+id+' into selected channel';use.onclick=()=>assignSound(id,selectedVoice);card.append(listen,use);$('quickSoundGrid').append(card);cards.push({id,img,label});
+        }void loadChoiceArt(cards,generation,$('rpcUrl').value.trim(),true);
+      }
+      $('shelfPrev').onclick=()=>{shelfBank--;drawShelf();};$('shelfNext').onclick=()=>{shelfBank++;drawShelf();};$('shelfMore').onclick=()=>$('chooseSound').click();
+      setInterval(()=>{if(document.hidden)return;$('shelfTarget').textContent='BIT '+bitTokenIds[selectedVoice];for(const card of $('quickSoundGrid').children){card.classList.toggle('assigned',Number(card.dataset.id)===bitTokenIds[selectedVoice]);card.lastChild.disabled=soundLoading||!!tl.record||recordPreparing;}},180);
+      $('rpcUrl').addEventListener('change',()=>{drawShelf();void preloadAssignedSamples();});drawShelf();
+
     }
 
     function validateTakes(value){
@@ -2903,39 +3154,6 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       ctx.fillStyle=BG_COLOR;ctx.fillRect(0,0,c.width,86);ctx.fillStyle=INK_COLOR;ctx.font='10px monospace';ctx.fillText('VELOCITY',6,12);
       ctx.globalAlpha=.25;ctx.fillRect(LEFT,76,c.width-LEFT,1);ctx.globalAlpha=1;
       tl.notes.forEach((n,i)=>{if(n.note>127)return;const x=LEFT+n.startMs/beatMs()*px()-scroll.scrollLeft;if(x<LEFT||x>c.width)return;const height=Math.min(n.vel,127)/127*56;ctx.fillStyle=tl.selected.has(i)?ACCENT_COLOR:INK_COLOR;ctx.fillRect(x-3,76-height,6,height);ctx.beginPath();ctx.arc(x,76-height,3,0,Math.PI*2);ctx.fill();});
-    }
-    let takePreviewTimers=[],takePreviewGeneration=0;
-    function stopTakePreview(){takePreviewGeneration++;takePreviewTimers.forEach(clearTimeout);takePreviewTimers=[];stopPerformance();}
-    async function previewTake(ch,t){
-      stopTakePreview();stopPlayback();const generation=takePreviewGeneration;
-      try{await Tone.start();await preparePerformance(ch);if(generation!==takePreviewGeneration)return;
-        for(const [i,n] of tlDecode(t.part).entries()){if(n.note>127)continue;const key='take-preview:'+i;
-          takePreviewTimers.push(setTimeout(()=>{if(generation===takePreviewGeneration)performOn(key,n.note,n.vel,performance.now(),ch);},n.startMs));
-          takePreviewTimers.push(setTimeout(()=>performOff(key),n.startMs+n.durationMs));
-        }
-      }catch(e){$('takeMessage').textContent=e.message;}
-    }
-    function showTakes(ch=selectedVoice){
-      const dialog=$('takesDialog');if(!dialog)return;stopTakePreview();dialog.dataset.channel=ch;
-      $('takeTitle').textContent=channelNames[ch]+' · recording takes';$('takeList').replaceChildren();
-      for(const [i,t] of recordingTakes[ch].entries()){
-        const row=document.createElement('label');row.className='take-row';const check=document.createElement('input');check.type='checkbox';check.value=i;
-        const name=document.createElement('span');name.textContent=t.name+' · '+tlDecode(t.part).length+' notes · '+t.bpm+' BPM';name.style.flex='1';
-        const play=document.createElement('button');play.textContent='Audition';play.onclick=e=>{e.preventDefault();previewTake(ch,t);};row.append(check,name,play);$('takeList').append(row);
-      }
-      $('takeMessage').textContent='Select one take or combine several. Apply replaces the part and archives the previous performance. Add layers them onto the existing part. Takes retain their recorded millisecond timing.';
-      if(!recordingTakes[ch].length)$('takeMessage').textContent='No takes yet. Enable Loop takes beside Record and record a few passes.';
-      if(!dialog.open)dialog.showModal();
-    }
-    function applyTakes(add){
-      const ch=Number($('takesDialog').dataset.channel),chosen=[...$('takeList').querySelectorAll('input:checked')].map(c=>recordingTakes[ch][Number(c.value)]);
-      if(!chosen.length){$('takeMessage').textContent='Select at least one take.';return;}stopTakePreview();
-      const previous=PART_DATA[ch]||'',notes=chosen.flatMap(t=>tlDecode(t.part));if(add)notes.unshift(...tlDecode(previous));
-      // Keep exact duplicates out when merging passes; timing and velocity differences remain.
-      const unique=[...new Map(notes.map(n=>[[n.note,n.startMs,n.durationMs,n.vel].join(':'),n])).values()].sort((a,b)=>a.startMs-b.startMs);
-      if(previous&&!recordingTakes[ch].some(t=>t.part===previous))recordingTakes[ch].push({name:'Previous part',part:previous,bpm:BPM,phraseBars:PHRASE_BARS[ch]});
-      tl.undo[ch].push(previous);tl.redo[ch]=[];PART_DATA[ch]=tlEncode(unique);
-      if(ch===selectedVoice)$('partInput').value=PART_DATA[ch];timelineRefresh();updateInfo();layoutCompositionPreview();queueLiveRefresh();$('takesDialog').close();
     }
     let masterMeterTap=null;
     function disconnectMasterMeters(){
@@ -2979,15 +3197,18 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       lane.onpointerup=()=>{if(drag){drag=null;tlCommit();}};
       lane.onpointercancel=()=>{if(drag){tl.notes=drag.original;tl.undo[selectedVoice].pop();drag=null;tlDraw();}};
       scroll.addEventListener('scroll',drawVelocityLane);new ResizeObserver(drawVelocityLane).observe(lane);
-      const recordOptions=document.createElement('div');recordOptions.className='performance-toolbar';recordOptions.innerHTML='<label><input id="loopTakes" type="checkbox"> Loop takes</label><label>Passes <select id="takePasses"><option>2</option><option selected>4</option><option>8</option><option>16</option></select></label><button id="openTakes">Takes…</button>';
-      $('performancePanel').firstElementChild.after(recordOptions);recordOptions.append($('tlMidi'),$('tlInput'));$('openTakes').onclick=()=>{if(tl.record)tlFinishRecord();else showTakes();};
-      const dialog=document.createElement('dialog');dialog.id='takesDialog';dialog.innerHTML='<h2 id="takeTitle"></h2><div id="takeList"></div><p id="takeMessage" role="status"></p><div class="actions"><button id="applyTakes">Use / combine selected</button><button id="addTakes">Add to current part</button><button id="stopTakePreview">Stop audition</button><button id="closeTakes">Close</button></div>';document.body.append(dialog);
-      $('applyTakes').onclick=()=>applyTakes(false);$('addTakes').onclick=()=>applyTakes(true);$('stopTakePreview').onclick=stopTakePreview;$('closeTakes').onclick=()=>dialog.close();dialog.addEventListener('close',stopTakePreview);
+      const midiControls=document.createElement('div');midiControls.className='performance-toolbar';
+      $('performancePanel').firstElementChild.after(midiControls);midiControls.append($('tlMidi'),$('tlInput'));
       drawVelocityLane();
     }
 
     function tlMidiMessage(e){
       const [status,n,v]=e.data,type=status&240,key='midi:'+(status&15)+':'+n,now=e.timeStamp||performance.now();
+      if(!$('performWindow').hidden){
+        const pad=n-36;if(type===144&&v>0){if(pad>=0&&pad<CHANNEL_COUNT)firePad(pad,key,v,now);}
+        else if(type===128||(type===144&&v===0))performOff(key,now);
+        else if(type===176&&(n===120||n===123))stopPerformance();return;
+      }
       if(type===144&&v>0)performOn(key,n,v,now);
       else if(type===128||(type===144&&v===0))performOff(key,now);
       else if(type===176&&(n===120||n===123))stopPerformance();
@@ -2998,7 +3219,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       for(let pass=Math.max(0,Math.floor((begin-r.start)/r.length));pass<r.passes;pass++){
         const origin=r.start+pass*r.length,t=Math.max(begin,origin),finish=Math.min(end,origin+r.length);
         if(t>=end)break;if(finish-t<.5)continue;
-        r.notes.push({pass,note:n.note,vel:n.vel,startMs:Math.max(0,Math.round(t-origin)),durationMs:bound(Math.round(finish-t),1,65535)});
+        r.notes.push({ch:n.ch??r.channel,pass,note:n.note,vel:n.vel,startMs:Math.max(0,Math.round(t-origin)),durationMs:bound(Math.round(finish-t),1,65535)});
       }
     }
     function tlFinishRecord(){
@@ -3006,12 +3227,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       stopPerformance();for(const key of [...r.held.keys()])tlMidiOff(key,performance.now());
       clearTimeout(r.timer);clearInterval(r.tick);stopRecordClick(r);tl.record=null;stopPlayback();
       $('tlRecord').classList.remove('active');$('tlRecord').textContent='Record';$('tlInput').disabled=false;
-      for(let pass=0;pass<r.passes;pass++){
-        const notes=r.notes.filter(n=>n.pass===pass).map(({pass,...note})=>note);
-        if(notes.length)recordingTakes[r.channel].push({name:'Take '+(recordingTakes[r.channel].length+1),part:tlEncode(notes),bpm:r.bpm,phraseBars:r.bars});
-      }
-      tlMessage('Recording saved as takes. Your existing part is unchanged.');
-      if(r.notes.length)showTakes(r.channel);
+      finishOverdubRecording(r);
     }
     $('tlMidi').onclick=async()=>{try{if(!navigator.requestMIDIAccess)throw Error('Web MIDI unavailable. Open this file in a MIDI-capable browser on localhost or HTTPS.');tl.midi=await navigator.requestMIDIAccess({sysex:false});const refresh=()=>{stopPerformance();tlFinishRecord();const sel=$('tlInput'),prev=sel.value;sel.replaceChildren();for(const input of tl.midi.inputs.values()){if(input.state!=='connected')continue;const o=document.createElement('option');o.value=input.id;o.textContent=input.name||'MIDI input';sel.appendChild(o);input.onmidimessage=e=>{if(sel.value===input.id)tlMidiMessage(e);};}if([...sel.options].some(o=>o.value===prev))sel.value=prev;tlMessage(sel.options.length?'MIDI connected. Select an input and press Record.':'No MIDI input connected.');};tl.midi.onstatechange=refresh;refresh();}catch(e){tlMessage('MIDI: '+e.message);}};
     let recordPreparing=false,recordLoadGeneration=0;
@@ -3020,24 +3236,27 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       stopPerformance();
       recordPreparing=true;const button=$('tlRecord');button.disabled=true;button.textContent='LOADING AUDIO…';
       const channel=selectedVoice,generation=++recordLoadGeneration;
+      const multi=!$('performWindow').hidden;
+      const padChannels=multi?[...new Set(padAssignments.map(p=>p.channel))]:[channel];
+      const bars=multi?Math.max(bound(Number($('padBars').value)||1,1,255),...padChannels.map(i=>normalizedPhraseBars(PHRASE_BARS[i]))):PHRASE_BARS[channel];
       try{
         // Resume directly in the click gesture before RPC/decode work.
         await Tone.start();syncCurrentText();stopPlayback();await disposeAudio();
-        const needed=Array.from({length:CHANNEL_COUNT},(_,i)=>i).filter(i=>(i===channel||parsePart(PART_DATA[i]).length)&&!SAMPLE_DATA[i]);
+        const needed=Array.from({length:CHANNEL_COUNT},(_,i)=>i).filter(i=>(padChannels.includes(i)||parsePart(PART_DATA[i]).length)&&!SAMPLE_DATA[i]);
         if(needed.length){await loadBitSamples(needed,$('rpcUrl').value.trim());if(selectedVoice===channel)$('sampleInput').value=SAMPLE_DATA[channel];}
         if(generation!==recordLoadGeneration)return;
         await initAudio();if(generation!==recordLoadGeneration)return;if(selectedVoice!==channel)throw Error('Channel changed while loading. Press Record again.');
-        if(!voices[channel])throw Error('Load a BIT sample for this channel first.');
-        const backingLength=scheduleComposition(channel);
+        if(padChannels.some(i=>!voices[i]))throw Error('Load a BIT sample for each assigned channel first.');
+        const backingLength=scheduleComposition();
         const countInStart=Tone.now()+.05;
         const audioStart=countInStart+4*beatMs()/1000;
         const delayMs=(audioStart-Tone.getContext().rawContext.currentTime)*1000;
-        const start=performance.now()+delayMs;tl.record={channel,start,length:phraseMs(),passes:$('loopTakes').checked?Number($('takePasses').value):1,bpm:BPM,bars:PHRASE_BARS[channel],notes:[],held:new Map()};const r=tl.record;
+        const start=performance.now()+delayMs;tl.record={channel,multi,start,length:bars*4*beatMs(),passes:1,bpm:BPM,bars,notes:[],held:new Map()};const r=tl.record;
         Tone.Transport.loopEnd=r.length/1000;Tone.Transport.loop=true;
         startRecordClick(r,countInStart,beatMs()/1000);
         if(backingLength>0){playbackDurationSeconds=backingLength;playing=true;Tone.Transport.start(audioStart);draw();}
         button.classList.add('active');button.textContent='STOP RECORD';$('tlInput').disabled=true;
-        r.tick=setInterval(()=>{const t=performance.now()-r.start;tlMessage(t<0?'Count-in · '+Math.ceil(-t/beatMs()):'Take '+(Math.floor(t/r.length)+1)+' / '+r.passes+' · beat '+(Math.floor((t%r.length)/beatMs())+1));},100);
+        r.tick=setInterval(()=>{const t=performance.now()-r.start;tlMessage(t<0?'Count-in · '+Math.ceil(-t/beatMs()):'Recording · beat '+(Math.floor((t%r.length)/beatMs())+1));},100);
         r.timer=setTimeout(tlFinishRecord,delayMs+r.length*r.passes);
       }catch(err){if(tl.record)tlFinishRecord();tlMessage('Recording: '+err.message);await disposeAudio();}
       finally{recordPreparing=false;button.disabled=false;if(!tl.record)button.textContent='RECORD';}
@@ -3147,33 +3366,27 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       setInterval(()=>{if(document.activeElement!==name)name.value=channelNames[selectedVoice];},180);
       document.querySelectorAll('.track-select').forEach(b=>b.ondblclick=()=>{name.value=channelNames[selectedVoice];name.focus();name.select();});
       const label=document.createElement('label');label.innerHTML='<input id="importChannelNames" type="checkbox"> Channel names';$('importDialog').append(label);
-      const dialog=document.createElement('dialog');dialog.id='tempoDialog';
-      dialog.innerHTML='<h2>Change tempo</h2><p id="tempoQuestion"></p><p>Move notes to preserve their beat positions and lengths, or keep their timing in milliseconds.</p><div class="actions"><button id="tempoMove">Move notes with tempo</button><button id="tempoKeep">Keep note timing</button><button id="tempoCancel">Cancel</button></div><p id="tempoError" role="status"></p>';
-      document.body.append(dialog);
-      let proposed=BPM,taps=[],tapTimer;
+      let taps=[],tapTimer,tempoInputTimer;
       function requestTempo(value){
-        clearTimeout(tapTimer);proposed=Math.max(20,Math.min(400,Math.round(Number(value)||BPM)));$('bpm').value=BPM;
-        if(proposed===BPM)return;
-        $('tempoQuestion').textContent='Change from '+BPM+' to '+proposed+' BPM?';$('tempoError').textContent='';if(!dialog.open)dialog.showModal();
-      }
-      function commitTempo(move){
+        clearTimeout(tapTimer);clearTimeout(tempoInputTimer);
+        const proposed=Math.max(20,Math.min(400,Math.round(Number(value)||BPM)));if(proposed===BPM)return;
         try{
-          tlFinishRecord();syncCurrentText();const factor=move?BPM/proposed:1;
-          const parts=PART_DATA.map(part=>move?tlEncode(tlDecode(part).map(n=>{
+          tlFinishRecord();syncCurrentText();const factor=BPM/proposed;
+          const parts=PART_DATA.map(part=>tlEncode(tlDecode(part).map(n=>{
             const startMs=Math.round(n.startMs*factor),durationMs=n.durationMs?Math.max(1,Math.round(n.durationMs*factor)):0;
-            if(startMs>0xffffff||durationMs>65535)throw Error('This tempo would exceed the packed note timing limits. Choose a closer tempo or keep note timing.');
+            if(startMs>0xffffff||durationMs>65535)throw Error('This tempo exceeds the packed note timing limits. Choose a closer tempo.');
             return {...n,startMs,durationMs};
-          })):part);
+          })));
           const position=(playing?Tone.Transport.seconds*1000:playheadMs)*factor;
-          if(move)parts.forEach((part,i)=>{tl.undo[i].push(PART_DATA[i]);tl.redo[i]=[];PART_DATA[i]=part;});
-          BPM=proposed;Tone.Transport.bpm.value=BPM;playheadMs=position;tl.pasteMs*=factor;
+          parts.forEach((part,i)=>{if(part!==PART_DATA[i]){tl.undo[i].push(PART_DATA[i]);tl.redo[i]=[];PART_DATA[i]=part;}});
+          BPM=proposed;updateSyncedDelays();renderParams();Tone.Transport.bpm.value=BPM;playheadMs=position;tl.pasteMs*=factor;
           if(playing)Tone.Transport.seconds=position/1000;
           $('bpm').value=BPM;$('bpm').nextElementSibling.textContent=BPM+' BPM';$('partInput').value=PART_DATA[selectedVoice];
-          timelineRefresh();updateInfo();layoutCompositionPreview();queueLiveRefresh();draw();dialog.close();
-        }catch(err){$('tempoError').textContent=err.message;}
+          timelineRefresh();updateInfo();layoutCompositionPreview();queueLiveRefresh();draw();
+        }catch(err){$('bpm').value=BPM;setStatus('Tempo: '+err.message,true);}
       }
-      $('tempoMove').onclick=()=>commitTempo(true);$('tempoKeep').onclick=()=>commitTempo(false);$('tempoCancel').onclick=()=>dialog.close();
       $('bpm').onchange=e=>requestTempo(e.target.value);
+      $('bpm').oninput=e=>{clearTimeout(tempoInputTimer);const value=e.target.value;if(value)tempoInputTimer=setTimeout(()=>requestTempo(value),300);};
       $('bpm').title='Tempo · press T repeatedly to tap';
       $('bpm').addEventListener('keydown',e=>{
         if(e.key.toLowerCase()!=='t'||e.metaKey||e.ctrlKey||e.altKey)return;e.preventDefault();e.stopPropagation();if(e.repeat)return;
@@ -3268,13 +3481,13 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       $('confirmNewProject').onclick=async()=>{
         if(audioLoading||recordPreparing){setStatus('Wait for audio loading to finish before creating a project.',true);return;}
         tlFinishRecord();stopBitPreview();stopPlayback();await disposeAudio();clearTimeout(liveRefreshTimer);
-        recordingTakes=Array.from({length:CHANNEL_COUNT},()=>[]);for(let i=0;i<CHANNEL_COUNT;i++){SAMPLE_DATA[i]='';PART_DATA[i]='';PARAM_DATA[i]=bytesToHex(DEFAULT_PARAM_BYTES);paramBytes[i]=new Uint8Array(DEFAULT_PARAM_BYTES);ARRANGEMENT_DATA[i]='0xc0';PHRASE_BARS[i]=1;bitTokenIds[i]=i+1;channelNames[i]='Channel '+(i+1);}
+        padAssignments=normalizePads();recordingTakes=Array.from({length:CHANNEL_COUNT},()=>[]);for(let i=0;i<CHANNEL_COUNT;i++){SAMPLE_DATA[i]='';PART_DATA[i]='';PARAM_DATA[i]=bytesToHex(DEFAULT_PARAM_BYTES);paramBytes[i]=new Uint8Array(DEFAULT_PARAM_BYTES);ARRANGEMENT_DATA[i]='0xc0';PHRASE_BARS[i]=1;bitTokenIds[i]=i+1;channelNames[i]='Channel '+(i+1);}
         waveformCache=Array(CHANNEL_COUNT).fill(null);waveformJob++;resetTrackMix();selectedVoice=0;
-        BPM=120;MASTER_GAIN=.9;outputParamBytes=new Uint8Array(DEFAULT_OUTPUT_PARAM_BYTES);BG_COLOR='#1c1c1c';INK_COLOR='#eeeeee';ACCENT_COLOR='#8c8c8c';
+        BPM=120;channelDelaySync=Array.from({length:CHANNEL_COUNT},()=>({enabled:true,beats:.5}));updateSyncedDelays();MASTER_GAIN=.9;outputParamBytes=new Uint8Array(DEFAULT_OUTPUT_PARAM_BYTES);BG_COLOR='#1c1c1c';INK_COLOR='#eeeeee';ACCENT_COLOR='#8c8c8c';
         $('bpm').value=BPM;$('bpm').nextElementSibling.textContent=BPM+' BPM';$('masterGain').value=MASTER_GAIN;$('masterGain').nextElementSibling.textContent=MASTER_GAIN.toFixed(2);
         for(const [id,value] of [['bgColor',BG_COLOR],['inkColor',INK_COLOR],['accentColor',ACCENT_COLOR]]){$(id).value=value;$(id.replace('Color','Out')).textContent=value;}
         tl.notes=[];tl.selected.clear();tl.undo=Array.from({length:10},()=>[]);tl.redo=Array.from({length:10},()=>[]);tl.clipboard=[];tl.pasteMs=0;tl.source=null;tl.channel=-1;tl.drag=null;
-        rememberProject('Untitled',0);importSource=null;playheadMs=0;applyPalette();renderOutputFx();renderVoice();$('viewTimeline').click();setPlayhead(0);create.close();setStatus('New blank project');
+        rememberProject('Untitled',0);importSource=null;playheadMs=0;applyPalette();renderOutputFx();renderVoice();$('viewTimeline').click();setPlayhead(0);create.close();setStatus('New blank project');void preloadAssignedSamples();
       };
       const seek=make('div','seekControls','<label>Play from beat <input id="playFromBeat" type="number" min="1" step="0.25" value="1"></label><button id="seekToStart">Start</button><span class="tiny">Click the ruler to seek · edits ahead play this pass</span>');
       $('tlScroll').before(seek);const ruler=make('canvas','seekRuler');ruler.setAttribute('aria-label','Click to set playback position');seek.after(ruler);
@@ -3305,11 +3518,11 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       const header=make('header','studioHeader','<div class="studio-brand"><div class="studio-mark" aria-hidden="true"><i></i><i></i><i></i></div>BITS<span>Studio</span></div><div id="studioTransport"></div><div id="studioClock" aria-label="Playback position">001 · 1</div><div id="studioTempo"></div><div class="studio-project-actions"><button id="studioImport">Import MIDI</button><button id="studioProject">Project</button><button id="inspectorToggle" style="display:none">Inspector</button></div>');
       document.body.appendChild(header);
       $('studioTransport').append($('applyPlay'),$('stopButton'));
-      $('applyPlay').textContent='▶ Play';$('applyPlay').title='Apply current settings and play';
+      $('applyPlay').textContent='▶ Play';$('applyPlay').title='Play composition';
       $('stopButton').textContent='■';$('stopButton').title='Stop playback and recording';$('stopButton').setAttribute('aria-label','Stop');
       $('studioTempo').append($('bpm').closest('.param'));
       const rail=make('nav','channelRail','<div class="rail-heading">Channels <span>10</span></div>');rail.setAttribute('aria-label','Music channels');rail.append(tabs);rail.append(make('div',null,'<div class="rail-footer">Select a channel to edit.<br>Each BIT is an instrument.</div>'));editor.prepend(rail);
-      [...tabs.children].forEach((b,i)=>{b.innerHTML='<span class="track-index">'+String(i+1).padStart(2,'0')+'</span><span class="track-main"><span class="track-name"></span><span class="track-detail"></span></span><span class="track-meter" aria-hidden="true"><i></i></span>';});
+      [...tabs.children].forEach((b,i)=>{b.innerHTML='<span class="track-art"><img hidden alt=""><span>…</span></span><span class="track-main"><span class="track-name"></span><span class="track-detail"></span></span><span class="track-meter" aria-hidden="true"><i></i></span>';});
       [...tabs.children].forEach((b,i)=>{
         const row=make('div',null);row.className='track-row';row.classList.toggle('active',b.classList.contains('active'));b.classList.remove('active');b.classList.add('track-select');b.replaceWith(row);row.append(b);
         const controls=make('div',null);controls.className='track-mix';controls.dataset.track=i;
@@ -3321,7 +3534,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
           control.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();control.click();}};
           controls.append(control);
         }
-        row.append(controls);
+        row.append(controls);addChannelKnobs(row,i);
       });
       const top=make('div','workspaceHead','<div id="workspaceLabel">Piano roll<small>Write, record, and arrange your parts.</small></div>');
       top.append($('viewSwitch'));stage.prepend(top);$('viewTimeline').textContent='Produce';$('viewCanvas').textContent='Visual';$('viewSwitch').prepend($('viewTimeline'));
@@ -3354,9 +3567,10 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       const outputNodes=[];for(let n=outputStart;n;n=n.nextSibling)outputNodes.push(n);
       sections[5].append(outputAdvanced);outputNodes.forEach(n=>outputAdvanced.append(n));
 
-      pages.master.prepend(make('p',null,'<span class="studio-note">All channels → distortion → filter → master gain. Press Play to apply changes to the audio engine.</span>'));
+      pages.master.prepend(make('p',null,'<span class="studio-note">All channels → distortion → filter → master gain. Settings update the audio as you adjust them.</span>'));
       const palette=make('section','paletteControls','<div class="section-title">Visual palette</div>');
       for(const id of ['bgColor','inkColor','accentColor'])palette.append($(id).closest('.param'));
+      const randomColors=make('button','randomVisualColors','Random colors');randomColors.onclick=randomVisualPalette;palette.append(randomColors);
       pages.visual.append(palette,make('p',null,'<span class="studio-note">The final composition artwork, using your existing orbit renderer and audio-reactive waveforms. Press Visual above the workspace to preview it.</span>'));
       const focus=make('button','studioFocus','Expand visual');pages.visual.append(focus);
       focus.onclick=()=>{const preview=$('compositionPreview');if(!document.fullscreenElement){$('viewCanvas').click();preview.requestFullscreen?.().catch(e=>setStatus(e.message,true));}else document.exitFullscreen?.();};
@@ -3372,7 +3586,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
       const footer=make('footer','studioFooter','<span class="footer-label">BITS / COMPOSITION STUDIO</span>');footer.prepend($('status'));document.body.append(footer);
       panel.append(ih,nav,body);selectInspector('sound');
       const help=make('details','studioHelp','<summary>Editing shortcuts</summary>');$('tlHelp').before(help);help.append($('tlHelp'));
-      $('tlRecord').title='Record MIDI into this channel with a one-bar count-in';
+      $('tlRecord').title='Overdub this channel with a one-bar count-in; existing notes play along';
       $('tlImportMidi').style.display='none';
       const renames={tlMidi:'Connect MIDI',tlRecord:'Record',tlFit:'Fit notes',tlUndo:'Undo',tlRedo:'Redo',tlQuantize:'Quantize',tlDelete:'Delete',tlCut:'Cut',tlCopy:'Copy',tlPaste:'Paste',refreshBitPreview:'Refresh artwork',clearSample:'Clear sample',loadBit:'Load',quickSave:'Save locally',quickLoad:'Restore local save',exportSave:'Export JSON',importSave:'Import JSON'};
       for(const [id,text] of Object.entries(renames))$(id).textContent=text;
@@ -3400,7 +3614,7 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
           if(b.querySelector('.track-name').textContent!==name)b.querySelector('.track-name').textContent=name;
           if(b.querySelector('.track-detail').textContent!==detail)b.querySelector('.track-detail').textContent=detail;
           for(const control of b.querySelectorAll('[data-mix]')){const on=trackMix[i][control.dataset.mix];control.classList.toggle('active',on);control.setAttribute('aria-pressed',String(on));}
-          b.classList.toggle('mix-silent',!trackAudible(i));
+          b.classList.toggle('mix-silent',!trackAudible(i));b.classList.toggle('empty-channel',count===0);updateChannelKnobs(b,i);updateRailArt(b,i);
           b.querySelector('.track-select').setAttribute('aria-pressed',String(i===selectedVoice));b.querySelector('.track-select').setAttribute('aria-label','Channel '+(i+1)+', '+name+', '+detail);
           let level=0;try{if(voices[i]?.analyser){const a=voices[i].analyser.getValue();let sum=0;for(let j=0;j<a.length;j++)sum+=a[j]*a[j];level=Math.min(1,Math.sqrt(sum/a.length)*3);}}catch(_){}
           b.querySelector('.track-meter i').style.height=(level*100)+'%';
@@ -3427,6 +3641,10 @@ dialog input[type=text],dialog input[type=number],dialog textarea,dialog select{
     setupPerformance();
     setupExpression();
     setupMasterMeters();
+    setupPerformWindow();
+    setupBitPresets();
+    const preloadStatus=document.createElement('button');preloadStatus.id='samplePreloadStatus';preloadStatus.className='tiny';preloadStatus.title='Reload/preload assigned sounds';preloadStatus.onclick=()=>preloadAssignedSamples();$('prepareInstrument').after(preloadStatus);
+    void preloadAssignedSamples();
 
     document.documentElement.style.background = BG_COLOR;
     document.body.style.background = BG_COLOR;
